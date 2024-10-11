@@ -35,6 +35,12 @@ $columnColor: #f0e4cb;
 :root{
     // font-size: 16px;
     font-size: 22px;
+    @media (max-width: 600px) {
+        font-size: 3.5vw;
+    }
+    @media (max-width: 450px) {
+        font-size: 4vw;
+    }
 }
 
 body {
@@ -101,6 +107,13 @@ li{
     gap: 2em;
     margin-bottom: 1.5em;
     font-size: 1.1rem;
+
+    @media (max-width: 600px) {
+        // gap: 1em;
+    }
+    @media (max-width: 450px) {
+        gap: 1em;
+    }
 
     h2,h1{
         margin: 0;

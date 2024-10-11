@@ -1,6 +1,16 @@
 :root {
   font-size: 22px;
 }
+@media (max-width: 600px) {
+  :root {
+    font-size: 3.5vw;
+  }
+}
+@media (max-width: 450px) {
+  :root {
+    font-size: 4vw;
+  }
+}
 
 body {
   font-weight: normal;
@@ -61,6 +71,11 @@ h2 {
   gap: 2em;
   margin-bottom: 1.5em;
   font-size: 1.1rem;
+}
+@media (max-width: 450px) {
+  .button-div {
+    gap: 1em;
+  }
 }
 .button-div h2, .button-div h1 {
   margin: 0;
