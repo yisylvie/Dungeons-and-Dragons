@@ -1,0 +1,75 @@
+// to compile: 
+//      sass --watch scss:css
+//      automatically compiles anything in "scss" folder to "css" folder as changes are made
+
+//      sass <input.scss> [output.css]
+//      compile input.scss to output.css once
+
+//      sass scss:css
+//      compiles anything in "sass" folder to "css" folder
+
+@use "sass:math";
+$helvetica: "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+$translate500: translate(-50%, 0%);
+$translate5050: translate(-50%, -50%);
+$backgroundColor: #fcf9f2;
+$columnColor: #f0e4cb;
+
+@mixin centerFillWidth() {
+    width: -webkit-fill-available;
+    text-align: center;
+}
+
+// center element horizontally and vertically within parent container
+@mixin absoluteCenter(){
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+:root {
+    font-size: 16px;
+}
+
+body {
+    font-weight: normal;
+    font-style: normal;
+    line-height: 1.2em;
+    margin: 0;
+    padding: 0;
+    background-color: $backgroundColor;
+}
+
+h1, h2, h3, h4, h5, p, ol, ul, li, a, button, small, th {
+    margin: 0;
+    padding: 0;
+    color: inherit;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: normal;
+}
+
+button, input[type="submit"] {
+    cursor: pointer;
+}
+
+table {
+    border-spacing: 0;
+}
+
+.hidden {
+    display: none;
+}
+
+#herbalism {
+    display: flex;
+    header {
+        display: flex;
+    }
+    // #forage-log {
+    // }
+    // #ingredient-bag {
+    // }
+}

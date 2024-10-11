@@ -1,0 +1,167 @@
+// to compile: 
+//      sass --watch scss:css
+//      automatically compiles anything in "scss" folder to "css" folder as changes are made
+
+//      sass <input.scss> [output.css]
+//      compile input.scss to output.css once
+
+//      sass scss:css
+//      compiles anything in "sass" folder to "css" folder
+
+@use "sass:math";
+$helvetica: "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+$translate500: translate(-50%, 0%);
+$translate5050: translate(-50%, -50%);
+
+$green1: #e0e5c0;
+$green2: hsl(68, 42%, 73%);
+$backgroundColor: #fcf9f2;
+$columnColor: #f0e4cb;
+
+@mixin centerFillWidth() {
+    width: -webkit-fill-available;
+    text-align: center;
+}
+
+// center element horizontally and vertically within parent container
+@mixin absoluteCenter(){
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+:root{
+    // font-size: 16px;
+    font-size: 22px;
+}
+
+body {
+    font-weight: normal;
+    font-style: normal;
+    line-height: 1.2em;
+    margin: 0;
+    padding: 0;
+    background-color: $backgroundColor;
+
+    font-family: 'Courier New', Courier, monospace;
+    margin-top: 3.5em;
+    margin-bottom: 5em;
+}
+
+#everything{
+    width: 32em;
+    max-width: 90%;
+    margin: auto;
+}
+
+h1, h2, h3, h4, h5, p, ol, ul, li, a, button, small, th {
+    margin: 0;
+    padding: 0;
+    color: inherit;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: normal;
+}
+
+button, input[type="submit"] {
+    cursor: pointer;
+}
+
+table {
+    border-spacing: 0;
+}
+
+.hidden{
+    display: none;
+}
+
+h1{
+    font-size: 1.8rem;
+    margin-bottom: 1.3em;
+    line-height: 1.2em;
+    text-wrap: balance;
+}
+
+h2{
+    font-size: 1.1rem;
+    margin-top: .2em;
+    margin-bottom: .4em;
+    line-height: 1.2em;
+}
+
+li{
+    // line-height: 1.7em;
+}
+
+.button-div{
+    display: flex;
+    justify-content: center;
+    gap: 2em;
+    margin-bottom: 1.5em;
+    font-size: 1.1rem;
+
+    h2,h1{
+        margin: 0;
+        line-height: inherit;
+    }
+
+    .primary-button, .secondary-button{
+        padding: 0 1em;
+        line-height: 2em;
+        // font-size: inherit;
+        border-radius: .2em;
+        // font-size: 1rem;
+        font-family: inherit;
+        // transition: $transition;
+    }
+      
+    .primary-button{
+        background-color: $green1;
+        color: black;
+        border: .15rem solid $green1;
+    }
+    
+    .primary-button:hover{
+        background-color: $green2;
+        border: .15rem solid $green2;
+        // transition: $transition;
+    }
+      
+    .primary-button:active{
+        background-color: $green2;
+        border: .15rem solid $green2;
+    }
+    
+    .secondary-button{
+        background-color: $backgroundColor;
+        color: black;
+        border: .15rem solid $green2;
+    }
+      
+    .secondary-button:hover{
+        outline: .05rem solid $green2;
+        // transition: $transition;
+    }
+      
+    .secondary-button:active{
+        // background-color: $green2;
+        outline: .1rem solid $green2;
+    }    
+}
+
+#results {
+    .display-roll {
+        text-align: center;
+    }
+
+    ul{
+        .loot {
+            display: flex;
+            justify-content: space-between;
+            padding: .3em 1em;
+            gap: 1em;
+        }
+    }
+}

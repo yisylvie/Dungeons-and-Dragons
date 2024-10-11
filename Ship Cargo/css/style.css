@@ -1,0 +1,110 @@
+:root {
+  font-size: 22px;
+}
+
+body {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1.2em;
+  margin: 0;
+  padding: 0;
+  background-color: #fcf9f2;
+  font-family: "Courier New", Courier, monospace;
+  margin-top: 3.5em;
+  margin-bottom: 5em;
+}
+
+#everything {
+  width: 32em;
+  max-width: 90%;
+  margin: auto;
+}
+
+h1, h2, h3, h4, h5, p, ol, ul, li, a, button, small, th {
+  margin: 0;
+  padding: 0;
+  color: inherit;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: normal;
+}
+
+button, input[type=submit] {
+  cursor: pointer;
+}
+
+table {
+  border-spacing: 0;
+}
+
+.hidden {
+  display: none;
+}
+
+h1 {
+  font-size: 1.8rem;
+  margin-bottom: 1.3em;
+  line-height: 1.2em;
+  text-wrap: balance;
+}
+
+h2 {
+  font-size: 1.1rem;
+  margin-top: 0.2em;
+  margin-bottom: 0.4em;
+  line-height: 1.2em;
+}
+
+.button-div {
+  display: flex;
+  justify-content: center;
+  gap: 2em;
+  margin-bottom: 1.5em;
+  font-size: 1.1rem;
+}
+.button-div h2, .button-div h1 {
+  margin: 0;
+  line-height: inherit;
+}
+.button-div .primary-button, .button-div .secondary-button {
+  padding: 0 1em;
+  line-height: 2em;
+  border-radius: 0.2em;
+  font-family: inherit;
+}
+.button-div .primary-button {
+  background-color: #e0e5c0;
+  color: black;
+  border: 0.15rem solid #e0e5c0;
+}
+.button-div .primary-button:hover {
+  background-color: hsl(68deg, 42%, 73%);
+  border: 0.15rem solid hsl(68deg, 42%, 73%);
+}
+.button-div .primary-button:active {
+  background-color: hsl(68deg, 42%, 73%);
+  border: 0.15rem solid hsl(68deg, 42%, 73%);
+}
+.button-div .secondary-button {
+  background-color: #fcf9f2;
+  color: black;
+  border: 0.15rem solid hsl(68deg, 42%, 73%);
+}
+.button-div .secondary-button:hover {
+  outline: 0.05rem solid hsl(68deg, 42%, 73%);
+}
+.button-div .secondary-button:active {
+  outline: 0.1rem solid hsl(68deg, 42%, 73%);
+}
+
+#results .display-roll {
+  text-align: center;
+}
+#results ul .loot {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.3em 1em;
+  gap: 1em;
+}
+
+/*# sourceMappingURL=style.css.map */

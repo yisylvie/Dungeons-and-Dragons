@@ -1,0 +1,111 @@
+2d6,Ingredient,Terrain,Additional Rule(s)
+2,Silver Hibiscus,Arctic
+3,Mortflesh Powder,Arctic
+4,Ironwood Heart,Arctic
+5,Frozen Seedlings,Arctic,Find 2x the rolled amount
+6,Common Ingredient,Arctic,Roll on Common Ingredient table
+7,Common Ingredient,Arctic,Roll on Common Ingredient table
+8,Common Ingredient,Arctic,Roll on Common Ingredient table
+9,Arctic Creeper,Arctic,Find 2x the rolled amount
+10,Fennel Silk,Arctic
+11,Fiend’s Ivy,Arctic
+12,Voidroot,Arctic
+2,Hydrathistle,Coastal / Underwater,Find 1-2x the rolled amount
+3,Amanita Cap,Coastal / Underwater,Coastal Only
+4,Hyancinth Nectar,Coastal / Underwater
+5,Chromus Slime,Coastal / Underwater,Find 1-2x the rolled amount
+6,Common Ingredient,Coastal / Underwater,Roll on Common Ingredient table
+7,Common Ingredient,Coastal / Underwater,Roll on Common Ingredient table
+8,Common Ingredient,Coastal / Underwater,Roll on Common Ingredient table
+9,Lavender Sprig,Coastal / Underwater,Coastal Only
+10,Blue Toadshade,Coastal / Underwater,Coastal Only
+11,Wrackwort Bulbs,Coastal / Underwater,
+12,Cosmos Glond,Coastal / Underwater,Find 1-2x the rolled amount
+2,Cosmos Glond,Desert
+3,Arrow Root,Desert
+4,Dried Ephedra,Desert
+5,Cactus Juice,Desert,Find 2x the rolled amount
+6,Common Ingredient,Desert,Roll on Common Ingredient table
+7,Common Ingredient,Desert,Roll on Common Ingredient table
+8,Common Ingredient,Desert,Roll on Common Ingredient table
+9,Drakus Flower,Desert
+10,Scillia Beans,Desert
+11,Spineflower Berries,Desert
+12,Voidroot,Desert,Come with 1 Elemental Water
+2,Harrada Leaf,Forest
+3,Nightshade Berries,Forest
+4,Emetic Wax,Forest
+5,Verdant Nettle,Forest
+6,Common Ingredient,Forest,Roll on Common Ingredient table
+7,Common Ingredient,Forest,Roll on Common Ingredient table
+8,Common Ingredient,Forest,Roll on Common Ingredient table
+9,Arrow Root,Forest
+10,Ironwood Heart,Forest
+11,Blue Toadshade,Forest
+12,Wisp Stalks,Forest,"Find 2x during Night, Re-roll during Day"
+2,Harrada Leaf,Grasslands
+3,Drakus Flower,Grasslands
+4,Lavender Sprig,Grasslands,Find 2x the rolled amount
+5,Arrow Root,Grasslands
+6,Common Ingredient,Grasslands,Roll on Common Ingredient table
+7,Common Ingredient,Grasslands,Roll on Common Ingredient table
+8,Common Ingredient,Grasslands,Roll on Common Ingredient table
+9,Scillia Beans,Grasslands,Find 2x the rolled amount
+10,Cactus Juice,Grasslands
+11,Tail Leaf,Grasslands
+12,Hyancinth Nectar,Grasslands
+2,Devil’s Bloodleaf,Hills
+3,Nightshade Berries,Hills
+4,Tail Leaf,Hills,Find 2x the rolled amount
+5,Lavender Sprig,Hills
+6,Common Ingredient,Hills,Roll on Common Ingredient table
+7,Common Ingredient,Hills,Roll on Common Ingredient table
+8,Common Ingredient,Hills,Roll on Common Ingredient table
+9,Ironwood Heart,Hills
+10,Gengko Brush,Hills
+11,Rock Vine,Hills,Find 2x the rolled amount
+12,Harrada Leaf,Hills
+2,Basilisk’s Breath,Mountain
+3,Frozen Seedlings,Mountain,Find 2x the rolled amount
+4,Arctic Creeper,Mountain,Find 2x the rolled amount
+5,Dried Ephedra,Mountain
+6,Common Ingredient,Mountain,Roll on Common Ingredient table
+7,Common Ingredient,Mountain,Roll on Common Ingredient table
+8,Common Ingredient,Mountain,Roll on Common Ingredient table
+9,Drakus Flower,Mountain
+10,Luminous Cap Dust,Mountain,Find 2x the rolled amount in Caves
+11,Rock Vine,Mountain
+12,Primordial Balm,Mountain
+2,Devil’s Bloodleaf,Swamp
+3,Spineflower Berries,Swamp
+4,Emetic Wax,Swamp
+5,Amanita Cap,Swamp,Find 2x the rolled amount
+6,Common Ingredient,Swamp,Roll on Common Ingredient table
+7,Common Ingredient,Swamp,Roll on Common Ingredient table
+8,Common Ingredient,Swamp,Roll on Common Ingredient table
+9,Blue Toadshade,Swamp,Find 2x the rolled amount
+10,Wrackwort Bulb,Swamp
+11,Hydrathistle,Swamp,Find 2x the rolled amount in rain
+12,Primordial Balm,Swamp
+2,Primordial Balm,Underdark,Find 1-2x the rolled amount
+3,Silver Hibiscus,Underdark
+4,Devil’s Bloodleaf,Underdark
+5,Chromus Slime,Underdark
+6,Mortflesh Powder,Underdark,Find 2x the rolled amount
+7,Fennel Silk,Underdark
+8,Fiend’s Ivy,Underdark
+9,Gengko Brush,Underdark
+10,Luminous Cap Dust,Underdark,Find 2x the rolled amount
+11,Radiant Synthseed,Underdark
+12,Wisp Stalks,Underdark
+2,Mandrake Root,Common
+3,Quicksilver Lichen,Common
+4,Quicksilver Lichen,Common
+5,Wild Sageroot,Common
+6,Wild Sageroot,Common
+7,Bloodgrass,Common,Re-roll if not tracking provisions
+8,Wyrmtongue Petals,Common
+9,Wyrmtongue Petals,Common
+10,Milkweed Seeds,Common
+11,Milkweed Seeds,Common
+12,Mandrake Root,Common

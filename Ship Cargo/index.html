@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>Herbalism and Alchemy</title>
+        <link href="css/style.css" type="text/css" rel="stylesheet">
+        <link rel="shortcut icon" href="favicon.ico">
+        <script src="js/jquery-3.6.1.min.js"></script>
+    </head>
+    <body id="body">
+        <div id="everything">
+            <form id="cargoForm">
+                <div class="button-div">
+                    <button type = "button" class="size-button primary-button" value="small"><h2>Small</h2></button>
+                    <button type = "button" class="size-button secondary-button" value="medium"><h2>Medium</h2></button>
+                    <button type = "button" class="size-button secondary-button" value="large"><h2>Large</h2></button>
+                </div>
+                <div class="button-div">
+                    <button type = "button" class="condition-button primary-button" value="poor"><h2>Poor</h2></button>
+                    <button type = "button" class="condition-button secondary-button" value="average"><h2>Average</h2></button>
+                    <button type = "button" class="condition-button secondary-button" value="luxurious"><h2>Luxurious</h2></button>
+                </div>
+                <div class="button-div">
+                    <button type="submit" value="Loot" id="submit" class="primary-button"><h2>Loot</h2></button>
+                </div>
+            </form>
+            <div id="results">
+            </div>
+        </div>
+
+        <!-- Load JS libraries -->
+	    <script src="js/d3.v7.min.js"></script>
+
+    	<!-- Visualization objects -->
+        <script src="js/cargo.js"></script>
+
+        <!-- Load data, create visualizations -->
+        <script src="js/main.js"></script>
+    </body>
+</html>

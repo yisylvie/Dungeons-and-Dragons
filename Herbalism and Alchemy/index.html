@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>Herbalism and Alchemy</title>
+        <link href="css/style.css" type="text/css" rel="stylesheet">
+        <link rel="shortcut icon" href="favicon.ico">
+        <script src="js/jquery-3.6.1.min.js"></script>
+    </head>
+    <body id="body">
+        <div id="everything">
+            <div id="herbalism">
+                <div id="forage-div">
+                    <header>
+                        <div>
+                            Forage
+                        </div>
+                        <div>
+                            Brew
+                        </div>
+                    </header>
+                    <form id="forage-form">
+                        <div>
+                            <label for="start-date">Date:</label>
+                            <input type= "date" name="start-date" value="" id="start-date">--
+                            <input type= "date" name="end-date" value="" id="end-date">
+                        </div>
+                        <button id="today">Today</button>
+                        <div>
+                            <label for="terrain">Terrain:</label>
+                            <select name="terrain" id="terrain">
+                            </select>
+                        </div>
+                        <div>
+                            <label for="INT-WIS">Intelligence or Wisdom Modifier</label>
+                            <select name="INT-WIS" id="INT-WIS" value="0">
+                            </select>
+                        </div>
+                        <div>
+                            <label for="prof-herbs">
+                                Proficient with Herbalism Kit
+                            </label>
+                            <input type="checkbox" name="prof-herbs" id="prof-herbs">
+                        </div>
+                        <div id="prof-bonus-div" class="hidden">
+                            <label for="prof-bonus">Proficiency Bonus</label>
+                            <select name="prof-bonus" id="prof-bonus">
+                            </select>
+                        </div>
+                        <div>
+                            <label for="count">Times Per Day:</label>
+                            <select name="count" id="count">
+                            </select>
+                        </div>
+                        <div>
+                            <label for="locate-plants">
+                                Locate Plants
+                            </label>
+                                <input type="checkbox" name="locate-plants" id="locate-plants">
+                        </div>
+                        <div>
+                            <label for="track-prov">
+                                Tracking Provisions
+                            </label>
+                            <input type="checkbox" name="track-prov" id="track-prov">
+                        </div>
+                        <div id="additional-rule-div" class="hidden">
+                            <label for="additional-rule">
+                                Collecting at Night
+                            </label>
+                            <input type="checkbox" name="additional-rule" id="additional-rule">
+                        </div>
+                        <input type="submit" value="Forage" id="submit">
+                    </form>
+                    <div id="forage-log">
+                        <!-- <ul>
+                            <li>
+                                9/23
+                            </li>
+                            <li>
+                                Attempt 1 <img src="photos/icosahedron.svg" alt="d20 die"> 13 + 2 = 15 | Success
+                            </li>
+                        </ul> -->
+                    </div>
+                </div>
+                <div id="ingredient-bag">
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Load JS libraries -->
+	    <script src="js/d3.v7.min.js"></script>
+
+    	<!-- Visualization objects -->
+        <script src="js/herbalism.js"></script>
+
+        <!-- Load data, create visualizations -->
+        <script src="js/main.js"></script>
+    </body>
+</html>

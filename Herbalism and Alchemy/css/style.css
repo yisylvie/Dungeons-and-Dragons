@@ -1,0 +1,42 @@
+:root {
+  font-size: 16px;
+}
+
+body {
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1.2em;
+  margin: 0;
+  padding: 0;
+  background-color: #fcf9f2;
+}
+
+h1, h2, h3, h4, h5, p, ol, ul, li, a, button, small, th {
+  margin: 0;
+  padding: 0;
+  color: inherit;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: normal;
+}
+
+button, input[type=submit] {
+  cursor: pointer;
+}
+
+table {
+  border-spacing: 0;
+}
+
+.hidden {
+  display: none;
+}
+
+#herbalism {
+  display: flex;
+}
+#herbalism header {
+  display: flex;
+}
+
+/*# sourceMappingURL=style.css.map */
