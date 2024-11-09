@@ -18,29 +18,42 @@ const forageLog = document.getElementById("forage-log");
 const columnColor = "#f0e4cb";
 const backgroundColor = "#fcf9f2";
 
-// Today's date in html form is set in UTC so we must convert to local time
-function convertTimezone(date) {
-    let timeDifference = date.getTimezoneOffset();
-    date.setTime(date.getTime() - timeDifference * 60000);
-    return date;
-}
+// // Today's date in html form is set in UTC so we must convert to local time
+// function convertTimezone(date) {
+//     let timeDifference = date.getTimezoneOffset();
+//     date.setTime(date.getTime() - timeDifference * 60000);
+//     return date;
+// }
 
-// then we must convert it back?!
-function convertTimezoneBack(date) {
-    let timeDifference = date.getTimezoneOffset();
-    date.setTime(date.getTime() + timeDifference * 60000);
-    return date;
-}
+const datePicker = flatpickr("#date-input", {
+    mode:"range",
+    dateFormat: "m-d-Y",
+    defaultDate: "today",
+    enableTime: false,
+    allowInput: true,
+    defaultHour: 0,
+    defaultTime: 0
+});
+console.log(datePicker);
+
+
+// // then we must convert it back?!
+// function convertTimezoneBack(date) {
+//     let timeDifference = date.getTimezoneOffset();
+//     date.setTime(date.getTime() + timeDifference * 60000);
+//     return date;
+// }
 
 // set dates displayed as today's date
 function setToToday() {
-    let today = new Date();
-    today = convertTimezone(today);
-    startDateInput.valueAsDate = today;
-    endDateInput.valueAsDate = today;
+    // let today = new Date();
+    // today = convertTimezone(today);
+    // startDateInput.valueAsDate = today;
+    // endDateInput.valueAsDate = today;
+    datePicker.setDate(new Date().getMonth()+1 + "-" + new Date().getDate() + "-" + new Date().getYear());
 }
 
-setToToday();
+// setToToday();
 
 // listener to detect button click or keypress (so I don't have to create two functions every time)
 function setClickListener (el, listener) {
@@ -79,7 +92,7 @@ optionPopulation(intWisModInput,-5,10,true);
 intWisModInput.value = 0;
 
 terrainOptions = ["Coastal","Underwater", "Underdark","Desert","Mountain","Forest","Swamp","Arctic","Hills","Grasslands"];
-// populate terrain dropdown with options
+// populate terrain dropdown with option
 terrainOptions.forEach(terrain => {
     let option = document.createElement('option');
     option.value = terrain;
@@ -87,19 +100,19 @@ terrainOptions.forEach(terrain => {
     terrainInput.appendChild(option);
 }); 
 
-// Start date must occur before the end date
-startDateInput.addEventListener("change", function(event) {
-    if(startDateInput.valueAsDate > endDateInput.valueAsDate) {
-        endDateInput.valueAsDate = startDateInput.valueAsDate;
-    }
-});
+// // Start date must occur before the end date
+// startDateInput.addEventListener("change", function(event) {
+//     if(startDateInput.valueAsDate > endDateInput.valueAsDate) {
+//         endDateInput.valueAsDate = startDateInput.valueAsDate;
+//     }
+// });
 
-// End date must occur after the start date
-endDateInput.addEventListener("change", function(event) {
-    if(startDateInput.valueAsDate > endDateInput.valueAsDate) {
-        startDateInput.valueAsDate = endDateInput.valueAsDate;
-    }
-});
+// // End date must occur after the start date
+// endDateInput.addEventListener("change", function(event) {
+//     if(startDateInput.valueAsDate > endDateInput.valueAsDate) {
+//         startDateInput.valueAsDate = endDateInput.valueAsDate;
+//     }
+// });
 
 // can only add proficiency bonus if proficient with herbalism kit
 profHerbInput.addEventListener("change", function(event) {

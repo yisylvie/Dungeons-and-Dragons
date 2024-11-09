@@ -5,6 +5,8 @@
         <link href="css/style.css" type="text/css" rel="stylesheet">
         <link rel="shortcut icon" href="favicon.ico">
         <script src="js/jquery-3.6.1.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="flatpickr/flatpickr.min.css">
+        <script src="flatpickr/flatpickr.js"></script>
     </head>
     <body id="body">
         <div id="everything">
@@ -21,8 +23,9 @@
                     <form id="forage-form">
                         <div>
                             <label for="start-date">Date:</label>
-                            <input type= "date" name="start-date" value="" id="start-date">--
-                            <input type= "date" name="end-date" value="" id="end-date">
+                            <input type="text" id="date-input" data-input>
+                            <!-- <input type= "date" name="start-date" value="" id="start-date">-- -->
+                            <!-- <input type= "date" name="end-date" value="" id="end-date"> -->
                         </div>
                         <button id="today">Today</button>
                         <div>

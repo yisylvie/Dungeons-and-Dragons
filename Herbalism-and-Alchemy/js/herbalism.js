@@ -85,13 +85,18 @@ Herbalism.prototype.initVis = function(){
 
     forageForm.addEventListener("submit", function (e) {
         e.preventDefault();
+        console.log("bro");
+
         vis.forageData = gather();
         vis.wrangleData();
     })
 
     function gather() {
-        let startDate = convertTimezoneBack(startDateInput.valueAsDate);
-        let endDate = convertTimezoneBack(endDateInput.valueAsDate);
+        // let startDate = convertTimezoneBack(startDateInput.valueAsDate);
+        // let endDate = convertTimezoneBack(endDateInput.valueAsDate);
+        let startDate = new Date(datePicker.selectedDates[0]);
+        let endDate = datePicker.selectedDates.length == 2 ? new Date(datePicker.selectedDates[1]) : new Date(datePicker.selectedDates[0]);
+        console.log(endDate);
         let terrain = terrainInput.value;
         let intWisMod = parseInt(intWisModInput.value);
         
