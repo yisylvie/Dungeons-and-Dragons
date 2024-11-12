@@ -1,92 +1,152 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
     <head>
         <title>Herbalism and Alchemy</title>
-        <link href="css/style.css" type="text/css" rel="stylesheet">
         <link rel="shortcut icon" href="favicon.ico">
-        <script src="js/jquery-3.6.1.min.js"></script>
         <link rel="stylesheet" type="text/css" href="flatpickr/flatpickr.min.css">
+        <link href="css/style.css" type="text/css" rel="stylesheet">
+        <script src="js/jquery-3.6.1.min.js"></script>
         <script src="flatpickr/flatpickr.js"></script>
     </head>
     <body id="body">
         <div id="everything">
-            <div id="herbalism">
-                <div id="forage-div">
-                    <header>
+            <div id="side-panel">
+                <header id="side-panel-header">
+                    <h1 class="selected">Forage</h1>
+                    <h1>Brew</h1>
+                </header>
+                <form id="forage-form">
+                    <div>
+                        <label for="date-input">Collection Date(s)
+                        </label>
                         <div>
-                            Forage
-                        </div>
-                        <div>
-                            Brew
-                        </div>
-                    </header>
-                    <form id="forage-form">
-                        <div>
-                            <label for="start-date">Date:</label>
-                            <input type="text" id="date-input" data-input>
+                            <svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 96 960 960" width="48">
+                                <path d="M596.817 836Q556 836 528 807.817q-28-28.183-28-69T528.183 670q28.183-28 69-28T666 670.183q28 28.183 28 69T665.817 808q-28.183 28-69 28ZM182.152 981.978q-27.599 0-47.865-20.265-20.265-20.266-20.265-47.865V298.152q0-27.697 20.265-48.033 20.266-20.337 47.865-20.337H245v-60h69.065v60h331.87v-60H715v60h62.848q27.697 0 48.033 20.337 20.337 20.336 20.337 48.033v615.696q0 27.599-20.337 47.865-20.336 20.265-48.033 20.265H182.152Zm0-68.13h595.696V486H182.152v427.848Zm0-487.848h595.696V298.152H182.152V426Zm0 0V298.152 426Z"/>
+                            </svg>
+                            <input name="date-input" type="text" id="date-input" data-input>
                             <!-- <input type= "date" name="start-date" value="" id="start-date">-- -->
                             <!-- <input type= "date" name="end-date" value="" id="end-date"> -->
+                            <button id="today">Today</button>
                         </div>
-                        <button id="today">Today</button>
-                        <div>
-                            <label for="terrain">Terrain:</label>
-                            <select name="terrain" id="terrain">
-                            </select>
-                        </div>
-                        <div>
-                            <label for="INT-WIS">Intelligence or Wisdom Modifier</label>
-                            <select name="INT-WIS" id="INT-WIS" value="0">
-                            </select>
-                        </div>
-                        <div>
-                            <label for="prof-herbs">
-                                Proficient with Herbalism Kit
-                            </label>
-                            <input type="checkbox" name="prof-herbs" id="prof-herbs">
-                        </div>
-                        <div id="prof-bonus-div" class="hidden">
-                            <label for="prof-bonus">Proficiency Bonus</label>
-                            <select name="prof-bonus" id="prof-bonus">
-                            </select>
-                        </div>
-                        <div>
-                            <label for="count">Times Per Day:</label>
-                            <select name="count" id="count">
-                            </select>
-                        </div>
-                        <div>
-                            <label for="locate-plants">
-                                Locate Plants
-                            </label>
-                                <input type="checkbox" name="locate-plants" id="locate-plants">
-                        </div>
-                        <div>
-                            <label for="track-prov">
-                                Tracking Provisions
-                            </label>
-                            <input type="checkbox" name="track-prov" id="track-prov">
-                        </div>
-                        <div id="additional-rule-div" class="hidden">
-                            <label for="additional-rule">
-                                Collecting at Night
-                            </label>
-                            <input type="checkbox" name="additional-rule" id="additional-rule">
-                        </div>
-                        <input type="submit" value="Forage" id="submit">
-                    </form>
-                    <div id="forage-log">
-                        <!-- <ul>
-                            <li>
-                                9/23
-                            </li>
-                            <li>
-                                Attempt 1 <img src="photos/icosahedron.svg" alt="d20 die"> 13 + 2 = 15 | Success
-                            </li>
-                        </ul> -->
                     </div>
+                    <div>
+                        <label for="count">
+                            Time(s) Per Day
+                            <svg focusable="false" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" fill="currentColor" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+                                <path d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"></path><path d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"></path>
+                            </svg>
+                        </label>
+                        <select name="count" id="count">
+                        </select>
+                    </div>
+                    <div>
+                        <label for="terrain">Terrain
+                            <svg focusable="false" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" fill="currentColor" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+                                <path d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"></path><path d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"></path>
+                            </svg>
+                        </label>
+                        <select name="terrain" id="terrain">
+                        </select>
+                    </div>
+                    <div>
+                        <label for="INT-WIS">Intelligence or wisdom modifier
+                            <svg focusable="false" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" fill="currentColor" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+                                <path d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"></path><path d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"></path>
+                            </svg>
+                        </label>
+                        <select name="INT-WIS" id="INT-WIS">
+                        </select>
+                    </div>
+                    <div>
+                        <label for="prof-herbs">
+                            Proficient with Herbalism Kit
+                            <svg focusable="false" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" fill="currentColor" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+                                <path d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"></path><path d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"></path>
+                            </svg>
+                        </label>
+                        <input type="checkbox" name="prof-herbs" id="prof-herbs">
+                    </div>
+                    <div id="prof-bonus-div" class="hidden">
+                        <label for="prof-bonus">Proficiency Bonus</label>
+                        <select name="prof-bonus" id="prof-bonus">
+                        </select>
+                    </div>
+                    <div>
+                        <label for="locate-plants">
+                            Casting locate animals or plants spell
+                            <svg focusable="false" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" fill="currentColor" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+                                <path d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"></path><path d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"></path>
+                            </svg>
+                        </label>
+                            <input type="checkbox" name="locate-plants" id="locate-plants">
+                    </div>
+                    <div>
+                        <label for="track-prov">
+                            Tracking Provisions
+                            <svg focusable="false" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" fill="currentColor" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+                                <path d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"></path><path d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"></path>
+                            </svg>
+                        </label>
+                        <input type="checkbox" name="track-prov" id="track-prov">
+                    </div>
+                    <div id="additional-rule-div" class="hidden">
+                        <label for="additional-rule">
+                            Collecting at night
+                            <svg focusable="false" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" fill="currentColor" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+                                <path d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"></path><path d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"></path>
+                            </svg>
+                        </label>
+                        <input type="checkbox" name="additional-rule" id="additional-rule">
+                    </div>
+                    <input type="submit" value="Forage for Herbs" id="submit">
+                </form>
+                <div id="log">
                 </div>
+            </div>
+            <div id="main">
+                <header id="main-header">
+                    <nav>
+                        <h1 class="selected">Ingredient Bag</h1>
+                        <h1>Potions Pouch</h1>
+                    </nav>
+                    <menu>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 96 960 960" width="48">
+                                <path d="M596.817 836Q556 836 528 807.817q-28-28.183-28-69T528.183 670q28.183-28 69-28T666 670.183q28 28.183 28 69T665.817 808q-28.183 28-69 28ZM182.152 981.978q-27.599 0-47.865-20.265-20.265-20.266-20.265-47.865V298.152q0-27.697 20.265-48.033 20.266-20.337 47.865-20.337H245v-60h69.065v60h331.87v-60H715v60h62.848q27.697 0 48.033 20.337 20.337 20.336 20.337 48.033v615.696q0 27.599-20.337 47.865-20.336 20.265-48.033 20.265H182.152Zm0-68.13h595.696V486H182.152v427.848Zm0-487.848h595.696V298.152H182.152V426Zm0 0V298.152 426Z"/>
+                            </svg>
+                            <h2>
+                                Show Filters
+                            </h2>
+                        </li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 96 960 960" width="48">
+                                <path d="M596.817 836Q556 836 528 807.817q-28-28.183-28-69T528.183 670q28.183-28 69-28T666 670.183q28 28.183 28 69T665.817 808q-28.183 28-69 28ZM182.152 981.978q-27.599 0-47.865-20.265-20.265-20.266-20.265-47.865V298.152q0-27.697 20.265-48.033 20.266-20.337 47.865-20.337H245v-60h69.065v60h331.87v-60H715v60h62.848q27.697 0 48.033 20.337 20.337 20.336 20.337 48.033v615.696q0 27.599-20.337 47.865-20.336 20.265-48.033 20.265H182.152Zm0-68.13h595.696V486H182.152v427.848Zm0-487.848h595.696V298.152H182.152V426Zm0 0V298.152 426Z"/>
+                            </svg>
+                            <h2>
+                                Download CSV
+                            </h2>
+                        </li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 96 960 960" width="48">
+                                <path d="M596.817 836Q556 836 528 807.817q-28-28.183-28-69T528.183 670q28.183-28 69-28T666 670.183q28 28.183 28 69T665.817 808q-28.183 28-69 28ZM182.152 981.978q-27.599 0-47.865-20.265-20.265-20.266-20.265-47.865V298.152q0-27.697 20.265-48.033 20.266-20.337 47.865-20.337H245v-60h69.065v60h331.87v-60H715v60h62.848q27.697 0 48.033 20.337 20.337 20.336 20.337 48.033v615.696q0 27.599-20.337 47.865-20.336 20.265-48.033 20.265H182.152Zm0-68.13h595.696V486H182.152v427.848Zm0-487.848h595.696V298.152H182.152V426Zm0 0V298.152 426Z"/>
+                            </svg>
+                            <h2>
+                                Upload CSV
+                            </h2>
+                        </li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 96 960 960" width="48">
+                                <path d="M596.817 836Q556 836 528 807.817q-28-28.183-28-69T528.183 670q28.183-28 69-28T666 670.183q28 28.183 28 69T665.817 808q-28.183 28-69 28ZM182.152 981.978q-27.599 0-47.865-20.265-20.265-20.266-20.265-47.865V298.152q0-27.697 20.265-48.033 20.266-20.337 47.865-20.337H245v-60h69.065v60h331.87v-60H715v60h62.848q27.697 0 48.033 20.337 20.337 20.336 20.337 48.033v615.696q0 27.599-20.337 47.865-20.336 20.265-48.033 20.265H182.152Zm0-68.13h595.696V486H182.152v427.848Zm0-487.848h595.696V298.152H182.152V426Zm0 0V298.152 426Z"/>
+                            </svg>
+                            <h2>
+                                Add custom ingredient
+                            </h2>
+                        </li>
+                    </menu>
+                </header>
                 <div id="ingredient-bag">
-
+                </div>
+                <div id="potions-pouch" class="hidden">
                 </div>
             </div>
         </div>

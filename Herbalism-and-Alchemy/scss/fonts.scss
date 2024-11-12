@@ -1,0 +1,137 @@
+// https://github.com/jonathonf/solbera-dnd-fonts
+
+
+// Bookinsanity
+
+// normal
+@font-face {
+    font-family: "Bookinsanity";
+    src: url('../../fonts/Bookinsanity/Bookinsanity.otf');
+    src: url('../../fonts/Bookinsanity/Bookinsanity.otf') format("opentype");
+    src: url("https://raw.githubusercontent.com/jonathonf/solbera-dnd-fonts/master/Bookinsanity/Bookinsanity.otf") format("opentype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+// bold italic
+@font-face {
+    font-family: "Bookinsanity";
+    src: url('../../fonts/Bookinsanity/Bookinsanity Bold Italic.otf');
+    src: url('../../fonts/Bookinsanity/Bookinsanity Bold Italic.otf') format('opentype');
+    src: url("https://raw.githubusercontent.com/jonathonf/solbera-dnd-fonts/master/Bookinsanity/Bookinsanity%20Bold%20Italic.otf") format("opentype");
+    font-weight: bold;
+    font-style: italic;
+}
+
+// bold
+@font-face {
+    font-family: "Bookinsanity";
+    src: url('../../fonts/Bookinsanity/Bookinsanity Bold.otf');
+    src: url('../../fonts/Bookinsanity/Bookinsanity Bold.otf') format('opentype');
+    src: url("https://raw.githubusercontent.com/jonathonf/solbera-dnd-fonts/master/Bookinsanity/Bookinsanity%20Bold.otf") format("opentype");
+    font-weight: bold;
+    font-style: normal;
+}
+
+// italic
+@font-face {
+    font-family: "Bookinsanity";
+    src: url('../../fonts/Bookinsanity/Bookinsanity Italic.otf');
+    src: url('../../fonts/Bookinsanity/Bookinsanity Italic.otf') format('opentype');
+    src: url("https://raw.githubusercontent.com/jonathonf/solbera-dnd-fonts/master/Bookinsanity/Bookinsanity%20Italic.otf") format("opentype");
+    font-style: italic;
+    font-weight: normal;
+}
+
+
+// Mr Eaves Caps
+@font-face {
+    font-family: "Mr Eaves Caps";
+    src: url('../../fonts/Mr Eaves/Mr Eaves Small Caps.otf');
+    src: url("https://raw.githubusercontent.com/jonathonf/solbera-dnd-fonts/master/Mr%20Eaves/Mr%20Eaves%20Small%20Caps.otf") format("opentype");
+    font-style: normal;
+    font-weight: normal;
+}
+
+
+
+// Scaly Sans
+
+// normal
+@font-face {
+    font-family: "Scaly Sans";
+    src: url('../../fonts/Scaly Sans/Scaly Sans.otf');
+    src: url("https://raw.githubusercontent.com/jonathonf/solbera-dnd-fonts/master/Scaly%20Sans/Scaly%20Sans.otf") format("opentype");
+    font-style: normal;
+    font-weight: normal;
+}
+
+// bold italic
+@font-face {
+    font-family: "Scaly Sans";
+    src: url('../../fonts/Scaly Sans/Scaly Sans Bold Italic.otf');
+    src: url("https://raw.githubusercontent.com/jonathonf/solbera-dnd-fonts/master/Scaly%20Sans/Scaly%20Sans%20Bold%20Italic.otf") format("opentype");
+    font-weight: bold;
+    font-style: italic;
+}
+
+// bold
+@font-face {
+    font-family: "Scaly Sans";
+    src: url('../../fonts/Scaly Sans/Scaly Sans Bold.otf');
+    src: url("https://raw.githubusercontent.com/jonathonf/solbera-dnd-fonts/master/Scaly%20Sans/Scaly%20Sans%20Bold.otf") format("opentype");
+    font-weight: bold;
+    font-style: normal;
+}
+
+// italic
+@font-face {
+    font-family: "Scaly Sans";
+    src: url('../../fonts/Scaly Sans/Scaly Sans Italic.otf');
+    src: url("https://raw.githubusercontent.com/jonathonf/solbera-dnd-fonts/master/Scaly%20Sans/Scaly%20Sans%20Italic.otf") format("opentype");
+    font-style: italic;
+    font-weight: normal;
+}
+
+// small caps
+
+// normal
+@font-face {
+    font-family: "Scaly Sans Caps";
+    src: url('../../fonts/Scaly Sans Caps/Scaly Sans Caps.otf');
+    src: url("https://raw.githubusercontent.com/jonathonf/solbera-dnd-fonts/master/Scaly%20Sans%20Caps/Scaly%20Sans%20Caps.otf") format("opentype");
+    font-style: normal;
+    font-weight: normal;
+}
+
+// bold italic
+@font-face {
+    font-family: "Scaly Sans Caps";
+    src: url('../../fonts/Scaly Sans Caps/Scaly Sans Caps Bold Italic.otf');
+    src: url("https://raw.githubusercontent.com/jonathonf/solbera-dnd-fonts/master/Scaly%20Sans%20Caps/Scaly%20Sans%20Caps%20Bold%20Italic.otf") format("opentype");
+    font-weight: bold;
+    font-style: italic;
+}
+
+// bold
+@font-face {
+    font-family: "Scaly Sans Caps";
+    src: url('../../fonts/Scaly Sans Caps/Scaly Sans Caps Bold.otf');
+    src: url("https://raw.githubusercontent.com/jonathonf/solbera-dnd-fonts/master/Scaly%20Sans%20Caps/Scaly%20Sans%20Caps%20Bold.otf") format("opentype");
+    font-weight: bold;
+    font-style: normal;
+}
+
+// italic
+@font-face {
+    font-family: "Scaly Sans Caps";
+    src: url('../../fonts/Scaly Sans Caps/Scaly Sans Caps Italic.otf');
+    src: url("https://raw.githubusercontent.com/jonathonf/solbera-dnd-fonts/master/Scaly%20Sans%20Caps/Scaly%20Sans%20Caps%20Italic.otf") format("opentype");
+    font-style: italic;
+    font-weight: normal;
+}
+
+$Bookinsanity: "Bookinsanity", arial, helvetica, sans-serif;
+$ScalySans: "Scaly Sans", arial, helvetica, sans-serif;
+$ScalySansCaps: "Scaly Sans Caps", "Scaly Sans", arial, helvetica, sans-serif;
+$MrEavesCaps: "Mr Eaves Caps", georgia, "times new roman", times, serif;

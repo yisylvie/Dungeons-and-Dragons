@@ -9,12 +9,22 @@
 //      compiles anything in "sass" folder to "css" folder
 
 @use "sass:math";
-$helvetica: "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+@use "fonts";
 
 $translate500: translate(-50%, 0%);
 $translate5050: translate(-50%, -50%);
+
 $backgroundColor: #fcf9f2;
+$backgroundColor1: #FAF6EC;
+$backgroundColor2: #FAF6EC;
+
 $columnColor: #f0e4cb;
+$horLine: #CBAF68;
+
+$textColor1: #58170D;
+
+$borderHor: $horLine solid .08rem;
 
 @mixin centerFillWidth() {
     width: -webkit-fill-available;
@@ -40,15 +50,22 @@ body {
     margin: 0;
     padding: 0;
     background-color: $backgroundColor;
+    font-family: fonts.$ScalySans;
+    height: 100vh;
 }
 
-h1, h2, h3, h4, h5, p, ol, ul, li, a, button, small, th {
+h1, h2, h3, h4, h5, p, ol, ul, li, a, button, small, th, menu {
     margin: 0;
     padding: 0;
     color: inherit;
     text-decoration: none;
     font-size: 1rem;
     font-weight: normal;
+}
+
+svg {
+    height: 100%;
+    width: fit-content;
 }
 
 button, input[type="submit"] {
@@ -63,13 +80,74 @@ table {
     display: none;
 }
 
-#herbalism {
+#everything {
     display: flex;
+    height: 100%;
+
     header {
+        font-size: 1.3rem;
+        height: 1.7em;
         display: flex;
+        align-items: center;
+        font-family: fonts.$ScalySansCaps;
+
+        h1 {
+            width: max-content;
+            font-size: inherit;
+            padding: 0 1.2em;
+            line-height: 1.6em;
+            color: $textColor1;
+            cursor: pointer;
+        }
+
+        .selected {
+            border-bottom: $horLine solid 0.1em;
+            font-weight: bold;
+        }
+
+        border-bottom: $borderHor;
     }
-    // #forage-log {
-    // }
-    // #ingredient-bag {
-    // }
+
+    #side-panel {
+        width: 25%;
+        height: 100%;
+        background-color: $backgroundColor2;
+        border-right: $borderHor;
+
+        header {
+            justify-content: left;
+        }
+    }
+
+    #main {
+        width: 75%;
+        header {
+            background-color: $backgroundColor1;
+            justify-content: space-between;
+            nav {
+                display: flex;
+            }
+            menu {
+                font-family: fonts.$ScalySans;
+                display: flex;
+                gap: 1em;
+
+                li {
+                    font-size: .8rem;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    height: 1.2em;
+                    padding: .3em;
+                    gap:.3em;
+                    border: $horLine solid .1rem;
+                    border-radius: .2rem;
+                    h2 {
+                        width: max-content;
+                        font-size: inherit;
+                    }
+                }
+            }
+        }
+    }
 }
