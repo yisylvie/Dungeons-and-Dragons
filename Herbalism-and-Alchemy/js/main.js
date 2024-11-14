@@ -27,7 +27,7 @@ const backgroundColor = "#fcf9f2";
 
 const datePicker = flatpickr("#date-input", {
     mode:"range",
-    dateFormat: "m-d-Y",
+    dateFormat: "m/d/y",
     defaultDate: "today",
     enableTime: false,
     allowInput: true,
