@@ -1,14 +1,15 @@
 const submit = document.getElementById("submit");
 const today = document.getElementById("today");
 const forageForm = document.getElementById("forage-form");
-const startDateInput = document.getElementById("start-date");
-const endDateInput = document.getElementById("end-date");
+// const startDateInput = document.getElementById("start-date");
+// const endDateInput = document.getElementById("end-date");
 const terrainInput = document.getElementById("terrain");
 const countInput = document.getElementById("count");
 const profHerbInput = document.getElementById("prof-herbs");
 const profBonusDiv = document.getElementById("prof-bonus-div");
 const additionalRuleDiv = document.getElementById("additional-rule-div");
-const additionalRuleLabel = document.querySelector("label[for=additional-rule]");
+const additionalRuleLabel = document.querySelector("label[for=additional-rule] span");
+const additionalRuleTooltip = document.querySelector("label[for=additional-rule] div");
 const additionalRuleInput = document.getElementById("additional-rule");
 const profBonusInput = document.getElementById("prof-bonus");
 const intWisModInput = document.getElementById("INT-WIS");
@@ -25,17 +26,39 @@ const backgroundColor = "#fcf9f2";
 //     return date;
 // }
 
-const datePicker = flatpickr("#date-input", {
+const tooltipTriggerList = document.querySelectorAll("[data-bs-toggle='tooltip']")
+const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl, {
+    boundary: forageForm,
+    // container: forageForm,
+    fallbackPlacements: ["left", "right", "top", "bottom"],
+    // trigger: "click"
+}));
+
+const datePicker = flatpickr("#date-input-div", {
     mode:"range",
     dateFormat: "m/d/y",
+    // altFormat: "m/d/Y",
+    // altInput: true,
     defaultDate: "today",
+    // parseDate: (datestr, format) => {
+    //     return moment(datestr,format, true).toDate();
+    // },
     enableTime: false,
-    allowInput: true,
+    // allowInput: true,
     defaultHour: 0,
-    defaultTime: 0
+    defaultTime: 0,
+    clickOpens: false,
+    positionElement: document.getElementById("date-input-div"),
+    wrap: true
 });
+
 console.log(datePicker);
 
+document.querySelectorAll("#forage-form button").forEach(btn => {
+    setClickListener(btn,function(e) {
+        e.preventDefault();
+    });
+});
 
 // // then we must convert it back?!
 // function convertTimezoneBack(date) {
@@ -49,8 +72,11 @@ function setToToday() {
     // let today = new Date();
     // today = convertTimezone(today);
     // startDateInput.valueAsDate = today;
-    // endDateInput.valueAsDate = today;
-    datePicker.setDate(new Date().getMonth()+1 + "-" + new Date().getDate() + "-" + new Date().getYear());
+    // endDateInput.valueAsDate = today;           
+    let year = new Date().getFullYear();
+    year = year.toString().substring(2,4);
+    console.log(year);
+    datePicker.setDate(new Date().getMonth()+1 + "-" + new Date().getDate() + "-" + year);
 }
 
 // setToToday();
@@ -63,7 +89,7 @@ function setClickListener (el, listener) {
 
 // set dates to today's when Today is clicked
 setClickListener(today, function(e){
-    e.preventDefault();
+    // e.preventDefault();
     setToToday();
 });
 
@@ -100,20 +126,6 @@ terrainOptions.forEach(terrain => {
     terrainInput.appendChild(option);
 }); 
 
-// // Start date must occur before the end date
-// startDateInput.addEventListener("change", function(event) {
-//     if(startDateInput.valueAsDate > endDateInput.valueAsDate) {
-//         endDateInput.valueAsDate = startDateInput.valueAsDate;
-//     }
-// });
-
-// // End date must occur after the start date
-// endDateInput.addEventListener("change", function(event) {
-//     if(startDateInput.valueAsDate > endDateInput.valueAsDate) {
-//         startDateInput.valueAsDate = endDateInput.valueAsDate;
-//     }
-// });
-
 // can only add proficiency bonus if proficient with herbalism kit
 profHerbInput.addEventListener("change", function(event) {
     console.log(this);
@@ -127,17 +139,22 @@ profHerbInput.addEventListener("change", function(event) {
 // add extra rules depending on terrain
 terrainInput.addEventListener("change", function(event) {
     console.log(this);
+    const tooltip = bootstrap.Tooltip.getInstance("label[for=additional-rule] div");
+
     if (terrainInput.value == "Forest") {
         additionalRuleDiv.classList.remove("hidden");
         additionalRuleLabel.innerHTML = "Foraging at night";
-
+        console.log(tooltip);
+        tooltip.setContent({".tooltip-inner": "you might get snazy fun ingredients if you do ooolala"});
     } else if (terrainInput.value == "Mountain") {
         additionalRuleDiv.classList.remove("hidden");
         additionalRuleLabel.innerHTML = "Foraging in a cave";
+        tooltip.setContent({".tooltip-inner": "caves am i right"});
 
     } else if (terrainInput.value == "Swamp") {
         additionalRuleDiv.classList.remove("hidden");
         additionalRuleLabel.innerHTML = "Foraging in the rain";
+        tooltip.setContent({".tooltip-inner": "DANCING IN THE RAINN"});
 
     } else {
         additionalRuleDiv.classList.add("hidden");

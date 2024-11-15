@@ -22,20 +22,28 @@ Herbalism.prototype.initVis = function(){
     vis.ingredientBag = [];
     vis.ingredientBagDisplay = [];
 
-    vis.headers = ["Oldest Collection", "Qty", "Ingredient", "Rarity", "Details", "DC", "Found in&hellip;"];
-    // vis.headers = ['dates', 'ingredient', 'quantity', 'knowledge', 'rarity', 'type', 'details', 'concoction', 'description', 'terrain'];
+    vis.headers = ["Collection Dates", "Qty", "Ingredient", "Rarity", "Details", "DC", "Found in&hellip;"];
+    let ingredientBagKeys = ['dates', 'quantity', 'ingredient', 'rarity', 'details', 'DC', 'terrain'];
+    
+    // map displayed names of categories to names within ingredientBag
+    vis.categories = vis.headers.map((el,i) => {return {display: el, keys: ingredientBagKeys[i]}});
     vis.table = d3.select("#" + vis.parentElement).append("table");
     
-    vis.table.append("thead")
+    vis.thead = vis.table.append("thead")
         .append("tr")
         .selectAll("th")
-        .data(vis.headers)
+        .data(vis.categories)
         .enter()
         .append("th")
         .html(function (d) {
-            return "<strong>" + d + "</strong>";
-        });
+            return "<strong>" + d.display + "</strong>" + "<svg version='1.1' id='Layer_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' width='31.806px' height='17.917px' viewBox='0 0 31.806 17.917' enable-background='new 0 0 31.806 17.917' xml:space='preserve'><path fill='currentColor' d='M31.292,3.084l-14.417,14.43c-0.148,0.148-0.301,0.252-0.458,0.312c-0.158,0.061-0.329,0.091-0.514,0.091 s-0.356-0.03-0.514-0.09c-0.157-0.06-0.31-0.164-0.458-0.312L0.5,3.084C0.167,2.75,0,2.329,0,1.82s0.171-0.935,0.514-1.278 C0.875,0.181,1.301,0,1.792,0C2.283,0,2.709,0.181,3.07,0.542l12.833,12.833L28.736,0.542c0.352-0.352,0.775-0.523,1.271-0.514 c0.495,0.009,0.914,0.185,1.257,0.528c0.361,0.361,0.542,0.787,0.542,1.278C31.806,2.324,31.634,2.741,31.292,3.084z'/></svg>";
+        })
+        .style("text-align", function (d) {
+            return d == "Qty" || d == "DC" ? "center" : "left";
+        })
+        .classed("unsorted", true);
 
+    console.log(vis.thead);
     vis.tbody = vis.table.append("tbody");
     // vis.margin = { top: 20, right: 20, bottom: 50, left: 60 };
 
@@ -126,6 +134,60 @@ Herbalism.prototype.initVis = function(){
             "additionalRule": additionalRule
         };
     }
+
+    let raritySort = ["Common", "Uncommon", "Rare", "Very Rare", "Legendary"];
+    
+    // sort table by column value when headers are clicked
+    vis.thead.on("click", function(event, d) {
+        console.log(vis.ingredientBag);
+        vis.ingredientBag = vis.ingredientBag.sort((a,b) => {
+            if (typeof a[d.keys] == "object") {
+                if (d.keys == "dates") {
+                    console.log(a[d.keys]);
+                    console.log(b[d.keys]);
+                    let i = 0;
+                    while (i < a[d.keys].length && i < b[d.keys].length && a[d.keys][i].date.valueOf() - b[d.keys][i].date.valueOf() == 0) {
+                        console.log(a[d.keys][i]);
+                        console.log(b[d.keys][i]);
+                        i++;
+                    }
+
+                    if (i == a[d.keys].length || i == b[d.keys].length) {
+                        return a[d.keys][i-1].date.valueOf() - b[d.keys][i-1].date.valueOf();
+                    } else {
+                        return a[d.keys][i].date.valueOf() - b[d.keys][i].date.valueOf();
+                    }
+                    // if (a[d.keys][0].date.valueOf() - b[d.keys][0].date.valueOf() == 0) {
+
+                    // }
+                    // return a[d.keys][0].date.valueOf() - b[d.keys][0].date.valueOf();
+                } else if (d.keys == "terrain") {
+                    return a[d.keys][0].localeCompare(b[d.keys][0]);
+                }
+            } else if (typeof a[d.keys] == "number") {
+                return a[d.keys] - b[d.keys];
+            } else if (d.keys == "rarity") {
+                return raritySort.indexOf(a[d.keys]) - raritySort.indexOf(b[d.keys]);    
+            } else if (d.keys == "details") {
+                if (a["knowledge" == "none" && b["knowledge"] == "none"]) {
+
+                }
+                if (a["knowledge"] == "none") {
+                    return -1;
+                }
+                if (b["knowledge"] == "none") {
+                    return 1;
+                }
+                return a["type"].localeCompare(b["type"]);   
+            } else {
+                return a[d.keys].localeCompare(b[d.keys]);
+            }
+        });
+        vis.updateVis();
+        console.log(vis.ingredientBag);
+
+        console.log(this);
+    });
 }
 
 /*
@@ -320,6 +382,9 @@ Herbalism.prototype.wrangleData = function(){
                                     quantity : currentIngredient.quantity
                                 }
                             );
+                            // whenever we add a new date, we keep the dates chronological
+                            ingredientInBag[0].dates = ingredientInBag[0].dates
+                                .sort((a,b) => a.date.valueOf() - b.date.valueOf());
                         }
                         if (!ingredientInBag[0].terrain.includes(forageData.terrain)) {
                             ingredientInBag[0].terrain.push(forageData.terrain);
@@ -355,9 +420,11 @@ Herbalism.prototype.updateVis = function(){
     //     : subString) + "...";
     // }
 
+    // populating the table with our data
     let tr = vis.tbody.selectAll('tr')
         .data(vis.ingredientBag)
         .join(
+            // Styling table so rows alternate in colors
             function(enter) {
                 return enter
                 .append("tr")
@@ -378,14 +445,42 @@ Herbalism.prototype.updateVis = function(){
         .exit()
         .data(function (d,i) {
             let displayedData = vis.headers.map(function (item) {
+                display = d[item];
                 for (const el in d) {
-                    if (el == "dates" && item == "Oldest Collection") {
-                        return d[el].map((e) => e.date)
-                            .sort((a,b) => a.valueOf() - b.valueOf())[0]
+                    if (el == "dates" && item == "Collection Dates") {
+
+                        // format dates as dd/mm
+                        let sortedDates = d[el].map((e) => e.date)
+                            .map((r) => r
                             .toLocaleString("en-US", {
                                 month: "numeric",
                                 day: "numeric"
-                        });
+                        }));
+                        let datesString = "";
+
+                        // display terrains in comma separated lists of three
+                        // if > 3 terrains truncate with ...
+                        if (sortedDates.length > 3) {
+                            for (let j = 0; j < 3; j++) {
+                                if (j == 2) {
+                                    datesString += sortedDates[j] + "&hellip;";
+                                } else {
+                                    datesString += sortedDates[j] + ", ";
+                                }
+                            }
+                        } else {
+                            for (let j = 0; j < sortedDates.length; j++) {
+                                if (j == sortedDates.length - 1) {
+                                    datesString += sortedDates[j];
+                                } else {
+                                    datesString += sortedDates[j] + ", ";
+                                }
+                            }
+                        }
+                        display = datesString;
+
+                        // display terrains in comma separated lists of three
+                        // if > 3 terrains truncate with ...
                     } else if (el == "terrain" && item == "Found in&hellip;") {
                         let terrainString = "";
                         if (d[el].length > 3) {
@@ -405,26 +500,35 @@ Herbalism.prototype.updateVis = function(){
                                 }
                             }
                         }
-                        return terrainString;
+                        display = terrainString;
                     } else if (item == "Details" && el == "details") {
                         let details = "<strong>" + d["type"] + ":</strong>";
+
+                        // if no knowlege display an em dash
                         if (d["knowledge"] == "none") {
-                            return "&mdash;";
+                            display = "&mdash;";
+
+                            // show ingredient usage in concoction and what it does in finished potion
                         } else if (d["knowledge"] == "detailed") {
                             details += " " + d[el];
-                            return details;
+                            display = details;
+
+                        // display only ingredient usage in concoction
                         } else if (d["knowledge"] == "basic") {
-                            return details.replace(":","");
+                            display = details.replace(":","");
                         }
                     } else if (item == "DC" && el == "DC" && d[el] == 0) {
-                        return "&mdash;"
+                        display = "&mdash;";
+                        // return "&mdash;"
                     } else if (el == "quantity" && item == "Qty") {
-                        return d[el];
+                        display = d[el];
+                        // return d[el];
                     } else if (el == item.toLowerCase()) {
-                        return d[el];
+                        display = d[el];
+                        // return d[el];
                     }
                 }
-                return d[item];
+                return {display: display, header: item};
             });
             // console.log(displayedData);
             // console.log(vis.headers[i]);
@@ -434,8 +538,12 @@ Herbalism.prototype.updateVis = function(){
     td.enter()
         .append("td")
         .html(function (d) {
-            // console.log(d);
-            return d;
+            return d.display;
+        })
+        .style("text-align", function (d,i) {
+            if (d.header == "DC" || d.header == "Qty") {
+                return "center";
+            }
         });
 
     // // ---- DRAW BARS ----

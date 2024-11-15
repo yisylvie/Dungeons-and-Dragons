@@ -2,9 +2,19 @@
 <html lang="en">
     <head>
         <title>Herbalism and Alchemy</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta charset="utf-8">
+		<meta name="description" content="Forage for herbs and brew them into potions in DnD 5e">
+
         <link rel="shortcut icon" href="favicon.ico">
+
+        <!-- css libraries -->
+        <link rel="stylesheet" href="css/bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="flatpickr/flatpickr.min.css">
+
+        <!-- custom css -->
         <link href="css/style.css" type="text/css" rel="stylesheet">
+
         <script src="js/jquery-3.6.1.min.js"></script>
         <script src="flatpickr/flatpickr.js"></script>
     </head>
@@ -19,22 +29,18 @@
                     <div>
                         <label for="date-input">
                             Collection Date(s)
-                            <div>
+                            <div title="detirmins if you will collect wrackwort or not" data-bs-toggle="tooltip" data-bs-placement="left" tabindex="0">
                                 <svg focusable="false" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" fill="currentColor" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
                                     <path d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"></path><path d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"></path>
                                 </svg>
-                                <div class="tooltip">
-                                    <small>detirmins if you will collect wrackwort or not</small>
-                                </div>
                             </div>
                         </label>
                         <div id="date-input-div">
-                            <div class="svg-div">
-                                <!-- adfas -->
+                            <button class="svg-div" data-toggle>
                                 <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 96 960 960" width="48">
                                     <path d="M596.817 836Q556 836 528 807.817q-28-28.183-28-69T528.183 670q28.183-28 69-28T666 670.183q28 28.183 28 69T665.817 808q-28.183 28-69 28ZM182.152 981.978q-27.599 0-47.865-20.265-20.265-20.266-20.265-47.865V298.152q0-27.697 20.265-48.033 20.266-20.337 47.865-20.337H245v-60h69.065v60h331.87v-60H715v60h62.848q27.697 0 48.033 20.337 20.337 20.336 20.337 48.033v615.696q0 27.599-20.337 47.865-20.336 20.265-48.033 20.265H182.152Zm0-68.13h595.696V486H182.152v427.848Zm0-487.848h595.696V298.152H182.152V426Zm0 0V298.152 426Z"/>
                                 </svg>
-                            </div>
+                            </button>
                             <input name="date-input" type="text" id="date-input" data-input>
                             <button id="today">Today</button>
                         </div>
@@ -42,13 +48,10 @@
                     <div>
                         <label for="count">
                             Time(s) Per Day
-                            <div>
+                            <div title="detirmins if you will collect wrackwort or not" data-bs-toggle="tooltip" data-bs-placement="left" tabindex="0">
                                 <svg focusable="false" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" fill="currentColor" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
                                     <path d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"></path><path d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"></path>
                                 </svg>
-                                <div class="tooltip">
-                                    <small>detirmins if you will collect wrackwort or not</small>
-                                </div>
                             </div>
                         </label>
                         <select name="count" id="count">
@@ -56,13 +59,10 @@
                     </div>
                     <div>
                         <label for="terrain">Terrain
-                            <div>
+                            <div title="detirmins if you will collect wrackwort or not" data-bs-toggle="tooltip" data-bs-placement="left" tabindex="0">
                                 <svg focusable="false" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" fill="currentColor" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
                                     <path d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"></path><path d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"></path>
                                 </svg>
-                                <div class="tooltip">
-                                    <small>detirmins if you will collect wrackwort or not</small>
-                                </div>
                             </div>
                         </label>
                         <select name="terrain" id="terrain">
@@ -70,13 +70,10 @@
                     </div>
                     <div>
                         <label for="INT-WIS">Intelligence or wisdom modifier
-                            <div>
+                            <div title="detirmins if you will collect wrackwort or not" data-bs-toggle="tooltip" data-bs-placement="left" tabindex="0">
                                 <svg focusable="false" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" fill="currentColor" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
                                     <path d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"></path><path d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"></path>
                                 </svg>
-                                <div class="tooltip">
-                                    <small>detirmins if you will collect wrackwort or not</small>
-                                </div>
                             </div>
                         </label>
                         <select name="INT-WIS" id="INT-WIS">
@@ -86,13 +83,10 @@
                         <input type="checkbox" name="prof-herbs" id="prof-herbs">
                         <label for="prof-herbs">
                             Proficient with Herbalism Kit
-                            <div>
+                            <div title="detirmins if you will collect wrackwort or not" data-bs-toggle="tooltip" data-bs-placement="left" tabindex="0">
                                 <svg focusable="false" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" fill="currentColor" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
                                     <path d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"></path><path d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"></path>
                                 </svg>
-                                <div class="tooltip">
-                                    <small>detirmins if you will collect wrackwort or not</small>
-                                </div>
                             </div>
                         </label>
                     </div>
@@ -105,13 +99,10 @@
                         <input type="checkbox" name="locate-plants" id="locate-plants">
                         <label for="locate-plants">
                             Casting locate animals or plants spell
-                            <div>
+                            <div title="detirmins if you will collect wrackwort or not" data-bs-toggle="tooltip" data-bs-placement="left" tabindex="0">
                                 <svg focusable="false" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" fill="currentColor" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
                                     <path d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"></path><path d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"></path>
                                 </svg>
-                                <div class="tooltip">
-                                    <small>detirmins if you will collect wrackwort or not</small>
-                                </div>
                             </div>
                         </label>
                     </div>
@@ -119,31 +110,25 @@
                         <input type="checkbox" name="track-prov" id="track-prov">
                         <label for="track-prov">
                             Tracking Provisions
-                            <div>
+                            <div title="detirmins if you will collect wrackwort or not" data-bs-toggle="tooltip" data-bs-placement="left" tabindex="0">
                                 <svg focusable="false" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" fill="currentColor" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
                                     <path d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"></path><path d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"></path>
                                 </svg>
-                                <div class="tooltip">
-                                    <small>detirmins if you will collect wrackwort or not</small>
-                                </div>
                             </div>
                         </label>
                     </div>
                     <div id="additional-rule-div" class="hidden">
                         <input type="checkbox" name="additional-rule" id="additional-rule">
                         <label for="additional-rule">
-                            Collecting at night
-                            <div>
+                            <span>Collecting at night</span>
+                            <div title="detirmins if you will collect wrackwort or not" data-bs-toggle="tooltip" data-bs-placement="left" tabindex="0">
                                 <svg focusable="false" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" fill="currentColor" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
                                     <path d="M8.5 11L8.5 6.5 6.5 6.5 6.5 7.5 7.5 7.5 7.5 11 6 11 6 12 10 12 10 11zM8 3.5c-.4 0-.8.3-.8.8S7.6 5 8 5c.4 0 .8-.3.8-.8S8.4 3.5 8 3.5z"></path><path d="M8,15c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S11.9,15,8,15z M8,2C4.7,2,2,4.7,2,8s2.7,6,6,6s6-2.7,6-6S11.3,2,8,2z"></path>
                                 </svg>
-                                <div class="tooltip">
-                                    <small>detirmins if you will collect wrackwort or not</small>
-                                </div>
                             </div>
                         </label>
                     </div>
-                    <input type="submit" value="Forage for Herbs" id="submit">
+                    <input type="submit" value="Forage for Herbs" tabindex="0" id="submit">
                 </form>
                 <div id="log">
                 </div>
@@ -181,7 +166,7 @@
                         </li>
                         <li class="img-only">
                             <svg xmlns="http://www.w3.org/2000/svg" id="root" version="1.1" viewBox="0 0 13 13">
-                                <path fill="none" stroke-linecap="round" stroke="currentColor" d="M 6.5 1 V 12 M 1 6.5 H 12"/>
+                                <path fill="none"  stroke-linecap="round" stroke="currentColor" d="M 6.5 1 V 12 M 1 6.5 H 12"/>
                             </svg>                            
                         </li>
                         <!-- <li>
@@ -236,6 +221,7 @@
 
         <!-- Load JS libraries -->
 	    <script src="js/d3.v7.min.js"></script>
+        <script src="js/bootstrap.bundle.js"></script>
 
     	<!-- Visualization objects -->
         <script src="js/herbalism.js"></script>

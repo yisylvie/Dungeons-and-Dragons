@@ -1,3 +1,4 @@
+@import url(../css/bootstrap.min.css);
 @font-face {
   font-family: "Bookinsanity";
   src: local("Bookinsanity Remake"), local("Bookinsanity"), url("../../fonts/Bookinsanity/Bookinsanity.otf") format("opentype"), url("https://raw.githubusercontent.com/jonathonf/solbera-dnd-fonts/master/Bookinsanity/Bookinsanity.otf") format("opentype");
@@ -112,6 +113,17 @@ button, input[type=submit] {
   background-color: unset;
 }
 
+.tooltip {
+  --bs-tooltip-font-size: 0.75rem;
+  --bs-tooltip-color: black;
+  --bs-tooltip-bg: #bac37f;
+  --bs-tooltip-border-radius: .15rem;
+  font-family: "Bookinsanity", arial, helvetica, sans-serif;
+}
+.tooltip .tooltip-inner {
+  text-align: left;
+}
+
 table {
   border-spacing: 0;
 }
@@ -172,13 +184,13 @@ svg {
   cursor: pointer;
 }
 #everything #side-panel form button, #everything #side-panel form input[type=submit] {
-  padding: 0 1em;
+  padding: 0.375em 0.75em;
   border-radius: 0.2rem;
-  height: 2em;
+  height: 1.5;
   background-color: #bac37f;
   color: white;
   font-size: inherit;
-  line-height: 2em;
+  line-height: 1.5;
 }
 #everything #side-panel form input[type=submit] {
   margin-top: 0.8em;
@@ -195,6 +207,7 @@ svg {
   line-height: 2em;
   -webkit-appearance: none;
   -moz-appearance: none;
+  appearance: none;
   background-image: url("data:image/svg+xml;utf8,<svg version='1.1' id='Layer_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' width='31.806px' height='17.917px' viewBox='0 0 31.806 17.917' enable-background='new 0 0 31.806 17.917' xml:space='preserve'><path fill='currentColor' d='M31.292,3.084l-14.417,14.43c-0.148,0.148-0.301,0.252-0.458,0.312c-0.158,0.061-0.329,0.091-0.514,0.091 s-0.356-0.03-0.514-0.09c-0.157-0.06-0.31-0.164-0.458-0.312L0.5,3.084C0.167,2.75,0,2.329,0,1.82s0.171-0.935,0.514-1.278 C0.875,0.181,1.301,0,1.792,0C2.283,0,2.709,0.181,3.07,0.542l12.833,12.833L28.736,0.542c0.352-0.352,0.775-0.523,1.271-0.514 c0.495,0.009,0.914,0.185,1.257,0.528c0.361,0.361,0.542,0.787,0.542,1.278C31.806,2.324,31.634,2.741,31.292,3.084z'/></svg>");
   background-repeat: no-repeat;
   background-position-x: calc(100% - 0.5em);
@@ -211,29 +224,11 @@ svg {
   padding-right: 0.3em;
   line-height: 1.7em;
 }
-#everything #side-panel form label div:hover .tooltip {
-  display: block;
-}
 #everything #side-panel form label div {
   position: relative;
 }
 #everything #side-panel form label div .tooltip {
   display: none;
-  position: absolute;
-  background-color: #E0E5C0;
-  width: 11em;
-  font-size: 0.7rem;
-  left: 50%;
-  transform: translate(-50%, 0%);
-  top: 126%;
-  z-index: 1;
-  padding: 0.3em 0.8em;
-  line-height: 1.3em;
-  border: hsl(68deg, 42%, 50%) solid 0.05em;
-  border-radius: 0.15em;
-}
-#everything #side-panel form label div .tooltip small {
-  font-size: inherit;
 }
 #everything #side-panel form label div svg {
   display: block;
@@ -245,6 +240,7 @@ svg {
   cursor: pointer;
 }
 #everything #side-panel form #date-input-div {
+  box-sizing: content-box;
   width: -webkit-fill-available;
   border: #CBAF68 solid 0.1rem;
   border-color: #CBAF68;
@@ -275,6 +271,8 @@ svg {
   padding: 0;
   position: relative;
   cursor: pointer;
+  background-color: transparent;
+  border-radius: 0;
 }
 #everything #side-panel form #date-input-div svg {
   vertical-align: top;
@@ -284,9 +282,15 @@ svg {
   background-color: #CBAF68;
   color: white;
   border-radius: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  line-height: 2em;
 }
 #everything #side-panel form #terrain {
   text-align: left;
+}
+#everything #side-panel form #prof-bonus-div {
+  margin-left: 2em;
 }
 #everything #main {
   margin: 1.5em;
@@ -324,7 +328,7 @@ svg {
   font-size: inherit;
 }
 #everything #main header menu .img-only {
-  height: 2em;
+  height: 1.7em;
   padding: 0;
   border: none;
 }
@@ -348,6 +352,13 @@ svg {
   position: sticky;
   top: 0;
   background-color: #fcf9f2;
+}
+#everything #main #ingredient-bag table thead th {
+  vertical-align: middle;
+  cursor: pointer;
+}
+#everything #main #ingredient-bag table thead th svg {
+  rotate: 180deg;
 }
 
 /*# sourceMappingURL=style.css.map */
