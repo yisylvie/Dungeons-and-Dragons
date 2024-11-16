@@ -201,6 +201,7 @@ svg {
                 margin-top: .8em;
             }
 
+            // add custom dropdown and remove default one
             select {
                 $background: .6em;
                 cursor: pointer;
@@ -315,21 +316,22 @@ svg {
                 text-align: left;
             }
 
-            #prof-bonus-div {
+            .indented {
                 margin-left: 2em;
             }
         }
     }
 
     #main {
-        margin: 1.5em;
+        // margin: 1.5em;
+        overflow-y: scroll;
         width: 75%;
         header {
-            background: none;
-            border: none;
-            font-size: 1.2rem;
-            margin: .5rem;
-            margin-top: 0;
+            // background: none;
+            // border: none;
+            // font-size: 1.2rem;
+            // margin: .5rem;
+            // margin-top: 0;
             justify-content: space-between;
 
             nav {
@@ -339,7 +341,7 @@ svg {
                 font-family: fonts.$ScalySans;
                 display: flex;
                 gap: 2em;
-                // margin-right: 1em;
+                margin-right: 1.2em;
 
                 li {
                     font-size: .8rem;
@@ -364,12 +366,14 @@ svg {
             }
         }
         #ingredient-bag {
-            height: calc(100% - (1.7em + .5em));
-            overflow-y: scroll;
+            // height: calc(100% - (1.7em + .5em));
+            // overflow-y: scroll;
             font-size: 1.2rem;
             table {
+                border-collapse: separate;
+
                 font-size: 1rem;
-                margin: auto;
+                // margin: auto;
                 width: -webkit-fill-available;
                 text-align: left;
                 td, th {
@@ -382,14 +386,76 @@ svg {
                     position: sticky;
                     top: 0;
                     background-color: $backgroundColor;
-                    th {
-                        vertical-align: middle;
-                        cursor: pointer;
+                    text-wrap: nowrap;
 
+                    th {
+                        border-bottom: $border0;
+                    }
+                }
+            }
+
+            #ingredient-bag-table {
+                thead {
+                    th {
+                        cursor: pointer;
+                        div {
+                            padding-right: 1.3em;
+                            position: relative;
+                        }
                         svg {
-                            rotate: 180deg;
+                            position: absolute;
+                            height: .4em;
+                            visibility: visible;
+                            transform: translate(-0%, -50%);
+                            top: 50%;
+                            right: 0;
                         }
                     }
+
+                    .unsorted {
+                        svg {
+                            visibility: hidden;
+                        }
+                    }
+
+                    .descending {
+                        svg {
+                            // rotate: 180deg;
+                            transform: rotate(180deg) translate(-0%, 50%);
+                            // display: unset;
+                        }
+                    }
+                }
+
+                .number-hd {
+                    text-align: center;
+                    // padding-right: 1.8em;
+                }
+                .number-td {
+                    text-align: center;
+                    padding-right: 1.8em;
+                }
+            }
+
+            #filter-table {
+                background-color: $horLine1;
+                border-spacing: .08em 0;
+                border-bottom: $border0;
+                thead {
+                    // background-color: $backgroundColor1;
+                }
+                tbody {
+                    background-color: $columnColor;
+                }
+                th {
+
+                }
+                td {
+                    cursor: pointer;
+                }
+
+                .selected {
+                    background-color: $horLine1;
                 }
             }
         }

@@ -293,10 +293,15 @@ svg {
   margin-left: 2em;
 }
 #everything #main {
-  overflow-y: scroll;
+  margin: 1.5em;
   width: 75%;
 }
 #everything #main header {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  margin: 0.5rem;
+  margin-top: 0;
   justify-content: space-between;
 }
 #everything #main header nav {
@@ -306,7 +311,6 @@ svg {
   font-family: "Scaly Sans", arial, helvetica, sans-serif;
   display: flex;
   gap: 2em;
-  margin-right: 1.2em;
 }
 #everything #main header menu li {
   font-size: 0.8rem;
@@ -329,11 +333,13 @@ svg {
   border: none;
 }
 #everything #main #ingredient-bag {
+  height: calc(100% - 2.2em);
+  overflow-y: scroll;
   font-size: 1.2rem;
 }
 #everything #main #ingredient-bag table {
-  border-collapse: separate;
   font-size: 1rem;
+  margin: auto;
   width: -webkit-fill-available;
   text-align: left;
 }
@@ -349,16 +355,13 @@ svg {
   text-wrap: nowrap;
 }
 #everything #main #ingredient-bag table thead th {
-  border-bottom: #dfcea1 solid 0.08rem;
-}
-#everything #main #ingredient-bag #ingredient-bag-table thead th {
   cursor: pointer;
 }
-#everything #main #ingredient-bag #ingredient-bag-table thead th div {
+#everything #main #ingredient-bag table thead th div {
   padding-right: 1.3em;
   position: relative;
 }
-#everything #main #ingredient-bag #ingredient-bag-table thead th svg {
+#everything #main #ingredient-bag table thead th svg {
   position: absolute;
   height: 0.4em;
   visibility: visible;
@@ -366,32 +369,18 @@ svg {
   top: 50%;
   right: 0;
 }
-#everything #main #ingredient-bag #ingredient-bag-table thead .unsorted svg {
+#everything #main #ingredient-bag table thead .unsorted svg {
   visibility: hidden;
 }
-#everything #main #ingredient-bag #ingredient-bag-table thead .descending svg {
+#everything #main #ingredient-bag table thead .descending svg {
   transform: rotate(180deg) translate(0%, 50%);
 }
-#everything #main #ingredient-bag #ingredient-bag-table .number-hd {
+#everything #main #ingredient-bag table .number-hd {
   text-align: center;
 }
-#everything #main #ingredient-bag #ingredient-bag-table .number-td {
+#everything #main #ingredient-bag table .number-td {
   text-align: center;
   padding-right: 1.8em;
-}
-#everything #main #ingredient-bag #filter-table {
-  background-color: #dfcea1;
-  border-spacing: 0.08em 0;
-  border-bottom: #dfcea1 solid 0.08rem;
-}
-#everything #main #ingredient-bag #filter-table tbody {
-  background-color: #f0e4cb;
-}
-#everything #main #ingredient-bag #filter-table td {
-  cursor: pointer;
-}
-#everything #main #ingredient-bag #filter-table .selected {
-  background-color: #dfcea1;
 }
 
 /*# sourceMappingURL=style.css.map */

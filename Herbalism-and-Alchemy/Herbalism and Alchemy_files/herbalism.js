@@ -27,7 +27,7 @@ Herbalism.prototype.initVis = function(){
     
     // map displayed names of categories to names within ingredientBag
     vis.categories = vis.headers.map((el,i) => {return {display: el, keys: ingredientBagKeys[i]}});
-    vis.table = d3.select("#" + vis.parentElement).append("table").attr("id","ingredient-bag-table");
+    vis.table = d3.select("#" + vis.parentElement).append("table");
     
     vis.thead = vis.table.append("thead")
         .append("tr")
