@@ -505,9 +505,9 @@ Herbalism.prototype.wrangleData = function () {
                         if (!ingredientInBag[0].terrain.includes(forageData.terrain)) {
                             ingredientInBag[0].terrain.push(forageData.terrain);
 
-                            // add terrain to vis.filters not already there
-                            if (!vis.filters.terrain.includes(forageData.terrain)) {
-                                vis.filters.terrain.push(forageData.terrain);
+                            // add terrain to vis.filters if not already there
+                            if (!vis.filters.terrain.some((element) => element.display == forageData.terrain)) {
+                                vis.filters.terrain.push(vis.createAFilter(false, forageData.terrain));
                             }
 
                             // keep terrain array sorted alphabetically
@@ -561,13 +561,15 @@ Herbalism.prototype.wrangleData = function () {
                     return false;
                 });
 
-            vis.filters[filter].forEach(filter => {
-                if (filter.display == "All") {
-                    filter.selected = true;
+            vis.filters[filter].forEach(el => {
+                if (el.display == "All") {
+                    el.selected = true;
                 } else {
-                    filter.selected = false;
+                    el.selected = false;
                 }
             });
+
+            console.log(vis.filters);
 
             if (filter == "rarity") {
                 vis.filters[filter].sort((a, b) => vis.customSort(vis.raritySort, a.display, b.display));
@@ -576,6 +578,7 @@ Herbalism.prototype.wrangleData = function () {
             } else if (filter == "concoction") {
                 vis.filters[filter].sort((a, b) => vis.customSort(vis.concoctionSort, a.display, b.display));
             } else {
+                console.log(vis.filters[filter]);
                 vis.filters[filter].sort((a, b) => {
                     if (a.display == "All") {
                         return -1;
