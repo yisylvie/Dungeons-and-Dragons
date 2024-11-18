@@ -209,9 +209,7 @@ Herbalism.prototype.initVis = function () {
     }
 
     // sort table by column value when headers are clicked
-    vis.thead.on("click", function (event, d) {
-        console.log(vis.ingredientBag);
-        
+    vis.thead.on("click", function (event, d) {        
         // if it's already sorted in ascending order, sort in descending order 
         // otherwise sort in ascending
         if (this.classList.contains("ascending")) {
@@ -226,7 +224,6 @@ Herbalism.prototype.initVis = function () {
             });
             
             let oldSorted = document.querySelectorAll(".ascending, .descending");
-            console.log(oldSorted);
             oldSorted.forEach(th => {
                 th.classList.remove("descending");
                 th.classList.remove("ascending");
@@ -236,10 +233,7 @@ Herbalism.prototype.initVis = function () {
             this.classList.remove("unsorted");
             this.classList.add("ascending");
         }
-        vis.filterData();
-        console.log(vis.ingredientBag);
-        
-        console.log(this);
+        vis.filterData();        
     });
 
     /* this seems wrong
@@ -544,9 +538,37 @@ Herbalism.prototype.wrangleData = function () {
     }
 
     // sort filters
+    // change all selected filters to "All"
     // "All" always appears first and Unknown always last
     if (vis.ingredientBag.length > 0) {
         for (const filter in vis.filters) {
+            // automatically select "All" and unselect everything else
+            d3.selectAll("td")
+                .filter(function (d) {
+                    return d.display == "All" && d.header == filter;
+                })
+                .classed("selected", function(d) {
+                    d.selected = false;
+                    return false;
+                });
+
+            d3.selectAll("td")
+                .filter(function (d) {
+                    return d.selected == true && d.header == filter;
+                })
+                .classed("selected", function(d) {
+                    d.selected = false;
+                    return false;
+                });
+
+            vis.filters[filter].forEach(filter => {
+                if (filter.display == "All") {
+                    filter.selected = true;
+                } else {
+                    filter.selected = false;
+                }
+            });
+
             if (filter == "rarity") {
                 vis.filters[filter].sort((a, b) => vis.customSort(vis.raritySort, a.display, b.display));
             } else if (filter == "usage") {
@@ -579,20 +601,14 @@ Herbalism.prototype.filterData = function () {
         let isDisplayed = true;
         for (const filter in vis.filters) {
             let selectedFilters = vis.filters[filter].filter((el) => el.selected == true);
-            // console.log(selectedFilters);
             if (selectedFilters.some((el) => el.display == "All")) {
                 isDisplayed = isDisplayed && true;
             } else if (filter == "rarity") {
-                // console.log(selectedFilters.some((el) => el.display == d.rarity));
                 isDisplayed = isDisplayed && selectedFilters.some((el) => el.display == d.rarity);
             } else if (filter == "terrain") {
                 isDisplayed = isDisplayed && selectedFilters.some((el) => d[filter].includes(el.display));
             } else if (d.knowledge == "none") {
-                // console.log(selectedFilters);
-                // console.log(d);
-                // console.log(vis.filters);
                 isDisplayed = isDisplayed && selectedFilters.some((el) => {
-                    // console.log(el);
                     return el.display == "Unknown";
                 });
             } else {
@@ -706,6 +722,7 @@ Herbalism.prototype.updateFilterVis = function () {
                     vis.filters[d.header].find((element) => element.display == d.display).selected = true;
                     d.selected = true;
                 }
+                vis.updateFilterVis();
                 vis.filterData();
             }
         });
@@ -838,7 +855,6 @@ Herbalism.prototype.updateVis = function () {
                 }
                 return { display: display, header: item };
             });
-            // console.log(displayedData);
             return displayedData;
         });
 
