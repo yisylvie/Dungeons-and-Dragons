@@ -75,7 +75,6 @@ function setToToday() {
     // endDateInput.valueAsDate = today;           
     let year = new Date().getFullYear();
     year = year.toString().substring(2,4);
-    console.log(year);
     datePicker.setDate(new Date().getMonth()+1 + "-" + new Date().getDate() + "-" + year);
 }
 
@@ -128,7 +127,6 @@ terrainOptions.forEach(terrain => {
 
 // can only add proficiency bonus if proficient with herbalism kit
 profHerbInput.addEventListener("change", function(event) {
-    console.log(this);
     if (this.checked) {
         profBonusDiv.classList.remove("hidden");
     } else {
@@ -138,13 +136,11 @@ profHerbInput.addEventListener("change", function(event) {
 
 // add extra rules depending on terrain
 terrainInput.addEventListener("change", function(event) {
-    console.log(this);
     const tooltip = bootstrap.Tooltip.getInstance("label[for=additional-rule] div");
 
     if (terrainInput.value == "Forest") {
         additionalRuleDiv.classList.remove("hidden");
         additionalRuleLabel.innerHTML = "Foraging at night";
-        console.log(tooltip);
         tooltip.setContent({".tooltip-inner": "you might get snazy fun ingredients if you do ooolala"});
     } else if (terrainInput.value == "Mountain") {
         additionalRuleDiv.classList.remove("hidden");
@@ -174,7 +170,6 @@ Promise.all(promises).then(function(data){
 })
 .catch(function (e) {
     console.error(e);
-    // .log("error:",error);
 });
 
 function createVis(data){

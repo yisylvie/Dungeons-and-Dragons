@@ -4,7 +4,7 @@
  * @param _data						-- the actual data
  */
 
-Herbalism = function(_parentElement, _table, _data){
+Herbalism = function (_parentElement, _table, _data) {
     this.parentElement = _parentElement;
     this.tableData = _table;
     this.data = _data;
@@ -16,19 +16,37 @@ Herbalism = function(_parentElement, _table, _data){
  * Initialize visualization (static content, e.g. SVG area or axes)
  */
 
-Herbalism.prototype.initVis = function(){
+Herbalism.prototype.initVis = function () {
     vis = this;
 
+    // this is where we put all our ingredient data to be displayed
     vis.ingredientBag = [];
     vis.ingredientBagDisplay = [];
 
+    // initializing filters objects
+    vis.createAFilter = function(selected, display) {
+        return {selected: selected, display: display};
+    }
+    // this is where we put all the data for the filter options
+    vis.filters = {
+        terrain: [ vis.createAFilter(true, "All") ],
+        concoction: [ vis.createAFilter(true, "All") ],
+        rarity: [ vis.createAFilter(true, "All") ],
+        usage: [ vis.createAFilter(true, "All") ]
+    };
+    
+    vis.rotatedFilters = [];
+
     vis.headers = ["Collection Dates", "Qty", "Ingredient", "Rarity", "Details", "DC", "Found in&hellip;"];
     let ingredientBagKeys = ['dates', 'quantity', 'ingredient', 'rarity', 'details', 'DC', 'terrain'];
-    
+
     // map displayed names of categories to names within ingredientBag
-    vis.categories = vis.headers.map((el,i) => {return {display: el, keys: ingredientBagKeys[i]}});
-    vis.table = d3.select("#" + vis.parentElement).append("table").attr("id","ingredient-bag-table");
-    
+    vis.categories = vis.headers.map((el, i) => { return { display: el, keys: ingredientBagKeys[i] } });
+
+    // create our ingredient table
+    vis.table = d3.select("#" + vis.parentElement).append("table").attr("id", "ingredient-bag-table");
+
+    // populate our header with categories
     vis.thead = vis.table.append("thead")
         .append("tr")
         .selectAll("th")
@@ -38,39 +56,38 @@ Herbalism.prototype.initVis = function(){
         .html(function (d) {
             return "<div><strong>" + d.display + "</strong>" + "<svg version='1.1' id='Layer_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' width='31.806px' height='17.917px' viewBox='0 0 31.806 17.917' enable-background='new 0 0 31.806 17.917' xml:space='preserve'><path fill='currentColor' d='M31.292,3.084l-14.417,14.43c-0.148,0.148-0.301,0.252-0.458,0.312c-0.158,0.061-0.329,0.091-0.514,0.091 s-0.356-0.03-0.514-0.09c-0.157-0.06-0.31-0.164-0.458-0.312L0.5,3.084C0.167,2.75,0,2.329,0,1.82s0.171-0.935,0.514-1.278 C0.875,0.181,1.301,0,1.792,0C2.283,0,2.709,0.181,3.07,0.542l12.833,12.833L28.736,0.542c0.352-0.352,0.775-0.523,1.271-0.514 c0.495,0.009,0.914,0.185,1.257,0.528c0.361,0.361,0.542,0.787,0.542,1.278C31.806,2.324,31.634,2.741,31.292,3.084z'/></svg></div>";
         })
-        // .style("text-align", function (d) {
-        //     return d.display == "Qty" || d.display == "DC" ? "center" : "left";
-        // })
         .classed("unsorted", function (d) {
-            return d.keys != "dates";
+            return d.keys != "ingredient";
         })
         .classed("ascending", function (d) {
-            return d.keys == "dates";
+            return d.keys == "ingredient";
         })
         .classed("number-hd", function (d) {
-            return d.display == "Qty" || d.display == "DC" ? true : false;
+            return d.display == "Qty" || d.display == "DC";
         });
 
-    console.log(vis.thead);
     vis.tbody = vis.table.append("tbody");
 
+    // grab our filters table
+    vis.filterTable = d3.select("#filter-table");
+    vis.filterThead = vis.filterTable.select("thead");
+    vis.filterTbody = vis.filterTable.select("tbody");
+
+    
     // when the forage form is submitted, do some gathering and populate the table if successful
     forageForm.addEventListener("submit", function (e) {
-        e.preventDefault();
-        console.log("bro");
-
+        e.preventDefault();        
         vis.forageData = gather();
         vis.wrangleData();
     });
-
+    
     // grab the information inputted into the form
     function gather() {
         let startDate = new Date(datePicker.selectedDates[0]);
         let endDate = datePicker.selectedDates.length == 2 ? new Date(datePicker.selectedDates[1]) : new Date(datePicker.selectedDates[0]);
-        console.log(endDate);
         let terrain = terrainInput.value;
         let intWisMod = parseInt(intWisModInput.value);
-        
+
         let profBonus = parseInt(profBonusInput.value);
         // only add prof bonus if proficient with herbalism kit
         if (!profHerbInput.checked) {
@@ -84,13 +101,13 @@ Herbalism.prototype.initVis = function(){
         // only add the additional rule if we are in a relevant terrain
         if (terrain == "Forest" || terrain == "Mountain" || terrain == "Swamp") {
             additionalRule = additionalRuleInput.checked;
-        }        
-        return { 
-            'startDate': startDate, 
-            'endDate': endDate, 
-            'terrain': terrain, 
-            "intWisMod": intWisMod, 
-            "profBonus": profBonus, 
+        }
+        return {
+            'startDate': startDate,
+            'endDate': endDate,
+            'terrain': terrain,
+            "intWisMod": intWisMod,
+            "profBonus": profBonus,
             "count": count,
             "locatePlants": locatePlants,
             "trackProv": trackProv,
@@ -98,49 +115,61 @@ Herbalism.prototype.initVis = function(){
         };
     }
 
+    // the rarity and details section have custom sort orders
+    vis.raritySort = ["All", "Common", "Uncommon", "Rare", "Very Rare", "Legendary"];
+    vis.detailsSort = ["Potion Effect", "Special (Potion Effect)", "Potion Modifier", "Special (Potion & Toxin Modifier)", "Toxin Effect", "Special (Toxin Effect)", "Toxin Modifier", "Special (Enchantment)", "Enchantment"];
+    vis.usages = ["All", "Effect", "Modifier", "Enchantment", "Special", "Unknown"];
+    vis.concoctionSort = ["All", "Potion", "Poison", "Enchantment", "Unknown"];
+
+    // sort an array in a custom order
+    vis.customSort = function (sortArray, a, b) {
+        return sortArray.indexOf(a) - sortArray.indexOf(b);
+    }
+    
+    // sort an array alphabetically
+    vis.alphabeticalSort = function (a, b) {
+        return a.localeCompare(b);
+    }
+    
+    // sort an array chronologically
+    vis.chronologicalSort = function (a, b) {
+        return a.valueOf() - b.valueOf();
+    }
+    
     // sort ingredients by the various categories
-    vis.sortIngredients = function(a,b,ascending,d) {
-        // the rarity and details section have custom sort orders
-        let raritySort = ["Common", "Uncommon", "Rare", "Very Rare", "Legendary"];
-        let detailsSort = ["Potion Effect", "Special (Potion Effect)", "Potion Modifier", "Special (Potion & Toxin Modifier)", "Toxin Effect", "Special (Toxin Effect)", "Toxin Modifier", "Special (Enchantment)", "Enchantment"];
-
+    vis.sortIngredients = function (a, b, ascending, d) {
         if (d.keys == "dates") {
-
             // if we are sorting by oldest date, rearrange date array from oldest to newest
             // if sorting by newest, sort by newest to oldest
-            if(ascending) {
-                a[d.keys].sort((c,d) => c.date.valueOf() - d.date.valueOf());
-                b[d.keys].sort((c,d) => c.date.valueOf() - d.date.valueOf());
+            if (ascending) {
+                a[d.keys].sort((c, d) => vis.chronologicalSort(c.date, d.date));
+                b[d.keys].sort((c, d) => vis.chronologicalSort(c.date, d.date));
             } else {
-                a[d.keys].sort((d,c) => c.date.valueOf() - d.date.valueOf());
-                b[d.keys].sort((d,c) => c.date.valueOf() - d.date.valueOf());
+                a[d.keys].sort((d, c) => vis.chronologicalSort(c.date, d.date));
+                b[d.keys].sort((d, c) => vis.chronologicalSort(c.date, d.date));
             }
-
+            
             // sort by first collection date
             // if dates are the same, sort by second in array then third etc.
             let i = 0;
-            while (i < a[d.keys].length && i < b[d.keys].length && a[d.keys][i].date.valueOf() - b[d.keys][i].date.valueOf() == 0) {
-                console.log(a[d.keys][i]);
-                console.log(b[d.keys][i]);
+            while (i < a[d.keys].length && i < b[d.keys].length && vis.chronologicalSort(a[d.keys][i].date, b[d.keys][i].date) == 0) {
                 i++;
             }
-
+            
             // if we get to the end of one of the arrays without finding differing values
             // sort by array lengths
             if (i == a[d.keys].length || i == b[d.keys].length) {
                 return b[d.keys].length - a[d.keys].length;
             } else {
                 // first element in the array with differing values
-                return a[d.keys][i].date.valueOf() - b[d.keys][i].date.valueOf();
+                return vis.chronologicalSort(a[d.keys][i].date, b[d.keys][i].date);
             }
-
+            
         } else if (d.keys == "terrain") {
             // sort alphabetically by first terrain in array
             // if terrains are the same, sort by second then third etc.
             let i = 0;
-            while (i < a[d.keys].length && i < b[d.keys].length && a[d.keys][i].localeCompare(b[d.keys][i]) == 0) {
-                console.log(a[d.keys][i]);
-                console.log(b[d.keys][i]);
+            while (i < a[d.keys].length && i < b[d.keys].length && vis.alphabeticalSort(a[d.keys][i], b[d.keys][i]) == 0) {
                 i++;
             }
 
@@ -150,14 +179,14 @@ Herbalism.prototype.initVis = function(){
                 return a[d.keys].length - b[d.keys].length;
             } else {
                 // first element in the array with differing values
-                return a[d.keys][i].localeCompare(b[d.keys][i]);
+                return vis.alphabeticalSort(a[d.keys][i], b[d.keys][i]);
             }
-
+            
         }
         else if (typeof a[d.keys] == "number") {
             return a[d.keys] - b[d.keys];
         } else if (d.keys == "rarity") {
-            return raritySort.indexOf(a[d.keys]) - raritySort.indexOf(b[d.keys]);    
+            return vis.customSort(vis.raritySort, a[d.keys], b[d.keys]);
         } else if (d.keys == "details") {
             if (a["knowledge"] == "none") {
                 return 1;
@@ -165,7 +194,7 @@ Herbalism.prototype.initVis = function(){
             if (b["knowledge"] == "none") {
                 return -1;
             }
-            if (detailsSort.indexOf(a["type"]) - detailsSort.indexOf(b["type"]) == 0) {
+            if (vis.customSort(vis.detailsSort, a["type"], b["type"]) == 0) {
                 if (a["knowledge"] == "basic") {
                     return 1;
                 }
@@ -173,32 +202,31 @@ Herbalism.prototype.initVis = function(){
                     return -1;
                 }
             }
-            return detailsSort.indexOf(a["type"]) - detailsSort.indexOf(b["type"]);    
-            // return a["type"].localeCompare(b["type"]);   
+            return vis.customSort(vis.detailsSort, a["type"], b["type"]);
         } else {
-            return a[d.keys].localeCompare(b[d.keys]);
+            return vis.alphabeticalSort(a[d.keys], b[d.keys]);
         }
     }
 
     // sort table by column value when headers are clicked
-    vis.thead.on("click", function(event, d) {
+    vis.thead.on("click", function (event, d) {
         console.log(vis.ingredientBag);
-
+        
         // if it's already sorted in ascending order, sort in descending order 
         // otherwise sort in ascending
         if (this.classList.contains("ascending")) {
-            vis.ingredientBag = vis.ingredientBag.sort((b,a) => {
-                return vis.sortIngredients(a,b,false,d);
+            vis.ingredientBag = vis.ingredientBag.sort((b, a) => {
+                return vis.sortIngredients(a, b, false, d);
             });
             this.classList.remove("ascending");
             this.classList.add("descending");
         } else {
-            vis.ingredientBag = vis.ingredientBag.sort((a,b) => {
-                return vis.sortIngredients(a,b,true,d);
+            vis.ingredientBag = vis.ingredientBag.sort((a, b) => {
+                return vis.sortIngredients(a, b, true, d);
             });
-
+            
             let oldSorted = document.querySelectorAll(".ascending, .descending");
-            console.log(oldSorted)
+            console.log(oldSorted);
             oldSorted.forEach(th => {
                 th.classList.remove("descending");
                 th.classList.remove("ascending");
@@ -208,30 +236,73 @@ Herbalism.prototype.initVis = function(){
             this.classList.remove("unsorted");
             this.classList.add("ascending");
         }
-        vis.updateVis();
+        vis.filterData();
         console.log(vis.ingredientBag);
-
+        
         console.log(this);
     });
+
+    /* this seems wrong
+        turn object of arrays into rotated 90° array of arrays
+        goes from
+        {
+            concoction: [a, b, ...],
+            rarity: [a, b, ...]
+        }
+        to
+        [
+            [ { header: concoction, display: a }, { header: rarity, display: a }, ... ],
+            [ { header: concoction, display: b }, { header: rarity, display: b }, ... ],
+        ]
+     */
+    
+    vis.rotate = function(){
+        let i = 0;
+        let pau = 0;
+        while (pau < Object.keys(vis.filters).length) {
+            vis.rotatedFilters[i] = [];
+            for (const filter in vis.filters) {
+                if (i < vis.filters[filter].length) {
+                    vis.rotatedFilters[i].push({
+                        display: vis.filters[filter][i].display,
+                        header: filter,
+                        selected: vis.filters[filter][i].selected
+                    });
+                    if (i == vis.filters[filter].length - 1) {
+                        pau++;
+                    }
+                } else {
+                    vis.rotatedFilters[i].push({
+                        display: "",
+                        header: filter,
+                        selected: false
+                    });
+                }
+            }
+            i++;
+        }
+    }
+    vis.rotate();
+    vis.updateFilterVis();
 }
 
 /*
- * Data wrangling
+* Data wrangling
  */
 
-Herbalism.prototype.wrangleData = function(){
+Herbalism.prototype.wrangleData = function () {
     var vis = this;
 
     let forageData = vis.forageData;
 
     // dice functions!
-    let _1d4 = d3.randomInt(1,5);
-    let _1d20 = d3.randomInt(1,21);
+    let _1d4 = d3.randomInt(1, 5);
+    let _1d20 = d3.randomInt(1, 21);
     let _2d6 = d => {
-        return d3.randomInt(1,7)() + d3.randomInt(1,7)();
+        return d3.randomInt(1, 7)() + d3.randomInt(1, 7)();
     };
-    let _1d100 = d3.randomInt(1,101); 
-    let _1d2 = d3.randomInt(1,3);
+    let _1d100 = d3.randomInt(1, 101);
+    let _1d2 = d3.randomInt(1, 3);
 
     let advantage = forageData.locatePlants;
     let bonus = forageData.intWisMod + forageData.profBonus;
@@ -242,9 +313,9 @@ Herbalism.prototype.wrangleData = function(){
         if (terrain == "Underwater" || terrain == "Coastal") {
             terrain = "Coastal / Underwater";
         }
-        return vis.tableData.filter(
+        return vis.tableData.find(
             (element) => element.Terrain == terrain && element["2d6"] == diceRoll
-        )[0];
+        );
     }
 
     // forage each day from start date to end date (inclusive)
@@ -256,11 +327,7 @@ Herbalism.prototype.wrangleData = function(){
             // without advantage, make a DC 15 herbalism check to see if forage attempt is successful
             // otherwise attempt is automatically successful
             let check = bonus + _1d20();
-            // console.log(check);
-            if((!advantage && check >= 15) || advantage) {
-                // let log = document.createElement("tr").appendChild(document.createElement("td"));
-                // console.log(forageLog.querySelector("table"));
-                // forageLog.querySelector("table").appendChild(log);
+            if ((!advantage && check >= 15) || advantage) {
                 // each successful herbalism attempt nets you 1d4 ingredients
                 let numIngredients = _1d4();
                 for (let k = 0; k < numIngredients; k++) {
@@ -268,7 +335,6 @@ Herbalism.prototype.wrangleData = function(){
                     let ingredientRoll = _2d6();
 
                     let ingredientFound = findIngredient(forageData.terrain, ingredientRoll);
-                    //console.log(ingredientFound);
 
                     // reroll if underwater and ingredient is for coastal locations only
                     if (forageData.terrain == "Underwater") {
@@ -276,15 +342,13 @@ Herbalism.prototype.wrangleData = function(){
                             ingredientRoll = _2d6();
                             ingredientFound = findIngredient(forageData.terrain, ingredientRoll);
                         }
-                        //console.log(ingredientFound);
 
-                    // reroll if wisp stalks are found during the day
+                        // reroll if wisp stalks are found during the day
                     } else if (!forageData.additionalRule && forageData.terrain == "Forest") {
                         while (ingredientFound.Ingredient == "Wisp Stalks") {
                             ingredientRoll = _2d6();
                             ingredientFound = findIngredient(forageData.terrain, ingredientRoll);
                         }
-                        //console.log(ingredientFound);
                     }
 
                     currentIngredient.ingredient = ingredientFound.Ingredient;
@@ -294,8 +358,6 @@ Herbalism.prototype.wrangleData = function(){
                     if (ingredientFound.Ingredient == "Common Ingredient") {
                         ingredientRoll = _2d6();
                         ingredientFound = findIngredient("Common", ingredientRoll);
-
-                        //console.log(ingredientFound);
 
                         // do not collect bloodgrass unless tracking provisions
                         if (!forageData.trackProv) {
@@ -307,35 +369,36 @@ Herbalism.prototype.wrangleData = function(){
 
                         currentIngredient.ingredient = ingredientFound.Ingredient;
 
-                    // if a 2-4 or 10-12 is rolled, the ingredient has a 25% 
-                    // chance to become elemental water instead
-                    } else if (ingredientRoll >= 10 || ingredientRoll <=4) {
+                        // if a 2-4 or 10-12 is rolled, the ingredient has a 25% 
+                        // chance to become elemental water instead
+                    } else if (ingredientRoll >= 10 || ingredientRoll <= 4) {
                         if (_1d100() >= 75) {
                             currentIngredient.ingredient = "Elemental Water";
                         }
-                    }  
+                    }
 
                     // calculate the quantity of the ingredient found
                     // Usually 1 unless additional rulings specify otherwise
                     if (currentIngredient.ingredient == "Elemental Water") {
                         currentIngredient.quantity = 1;
-                    } else if (ingredientFound["Additional Rule(s)"] == "Find 2x the rolled amount"){
+                    } else if (ingredientFound["Additional Rule(s)"] == "Find 2x the rolled amount") {
                         currentIngredient.quantity = 2;
                     } else if (ingredientFound["Additional Rule(s)"] == "Find 1-2x the rolled amount") {
                         let coinFlip = _1d2();
                         currentIngredient.quantity = coinFlip;
-                    } else if (forageData.additionalRule && 
-                                (ingredientFound["Additional Rule(s)"] == "Find 2x during Night, Re-roll during Day" || 
-                                    ingredientFound["Additional Rule(s)"].includes("Find 2x the rolled amount in "))) {
+                    } else if (forageData.additionalRule &&
+                        (ingredientFound["Additional Rule(s)"] == "Find 2x during Night, Re-roll during Day" ||
+                            ingredientFound["Additional Rule(s)"].includes("Find 2x the rolled amount in "))) {
                         currentIngredient.quantity = 2;
                     } else {
                         currentIngredient.quantity = 1;
                     }
 
-                    //console.log(currentIngredient);
+                    // grab the ingredient from your bag if it exists
                     let ingredientInBag = vis.ingredientBag.filter((element) => element.ingredient == currentIngredient.ingredient);
-                    //console.log(ingredientInBag);
 
+                    // grab the ingredient information of the current ingredient 
+                    // from our original data
                     let ingredientFoundList = vis.data.filter((element) => element.Ingredient == currentIngredient.ingredient)[0];
 
                     // if you already have this ingredient in your bag, 
@@ -347,7 +410,7 @@ Herbalism.prototype.wrangleData = function(){
                         // ingredient if passing the check by >= 5 or >= 10 if it is rare/very rare
                         let detailedKnowledgeDC = 5;
                         let additionalCheck = 0;
-                        if(ingredientFoundList.Rarity.includes("Rare")) {
+                        if (ingredientFoundList.Rarity.includes("Rare")) {
                             additionalCheck = 3;
                             detailedKnowledgeDC = 10;
                         }
@@ -355,12 +418,11 @@ Herbalism.prototype.wrangleData = function(){
                         // you can identify the herb with a herbalism DC check of 10 + the DC of the respective herb
                         // for some fucking reason there is but one ingredient that has two different DCs,
                         // so we choose one at random
-                        let ingredientDC = ingredientFoundList.DC[d3.randomInt(0,ingredientFoundList.DC.length)()];
+                        let ingredientDC = ingredientFoundList.DC[d3.randomInt(0, ingredientFoundList.DC.length)()];
                         let DC = 10 + ingredientDC + additionalCheck;
-                        //console.log(DC);
 
                         // if you have advantage, identify ingredients roll is done with advantage
-                        if(advantage) {
+                        if (advantage) {
                             check = Math.max(bonus + _1d20(), bonus + _1d20());
                         } else {
                             check = bonus + _1d20();
@@ -383,11 +445,48 @@ Herbalism.prototype.wrangleData = function(){
                         currentIngredient.terrain = [forageData.terrain];
                         currentIngredient.dates = [
                             {
-                                date : new Date(i),
-                                quantity : currentIngredient.quantity
+                                date: new Date(i),
+                                quantity: currentIngredient.quantity
                             }
                         ];
                         currentIngredient.DC = ingredientDC;
+
+                        // add new filter options to vis.filters if they aren't already there
+
+                        // don't add to usage or concoction filters if user lacks the knowledge
+                        // add "Unknown" instead
+                        currentIngredient.usage = [];
+                        if (currentIngredient.knowledge == "none") {
+                            if (!vis.filters.usage.some((element) => element.display == "Unknown")) {
+                                vis.filters.usage.push(vis.createAFilter(false, "Unknown"));
+                                vis.filters.concoction.push(vis.createAFilter(false, "Unknown"));
+                            }
+                            currentIngredient.usage.push("Unknown");
+                        } else {
+                            // figure out the ingredient usage(s) by checking if one of 
+                            // the vis.usages elements is a substring of currentIngredient.type
+                            vis.usages.forEach(usage => {
+                                if (currentIngredient.type.includes(usage)) {
+                                    currentIngredient.usage.push(usage);
+                                    if (!vis.filters.usage.some((element) => element.display == usage)) {
+                                        vis.filters.usage.push(vis.createAFilter(false, usage));
+                                    }
+                                }
+                            });
+                            currentIngredient.concoction.forEach(concoction => {
+                                if (!vis.filters.concoction.some((element) => element.display == concoction)) {
+                                    vis.filters.concoction.push(vis.createAFilter(false, concoction));
+                                }
+                            });
+                        }
+                        
+                        if (!vis.filters.rarity.some((element) => element.display == currentIngredient.rarity)) {
+                            vis.filters.rarity.push(vis.createAFilter(false, currentIngredient.rarity));
+                        }
+
+                        if (!vis.filters.terrain.some((element) => element.display == forageData.terrain)) {
+                            vis.filters.terrain.push(vis.createAFilter(false, forageData.terrain));
+                        }
 
                         // since the ingredient is not already in the bag,
                         // we push it in the bag as a new element
@@ -397,28 +496,32 @@ Herbalism.prototype.wrangleData = function(){
                         ingredientInBag[0].quantity += currentIngredient.quantity;
                         let ingredientDate = ingredientInBag[0].dates.filter((element) => element.date.valueOf() === i.valueOf());
                         if (ingredientDate.length > 0) {
-                            console.log("add to date");
                             ingredientDate[0].quantity += currentIngredient.quantity;
                         } else {
-                            console.log("new date");
                             ingredientInBag[0].dates.push(
                                 {
-                                    date : new Date(i),
-                                    quantity : currentIngredient.quantity
+                                    date: new Date(i),
+                                    quantity: currentIngredient.quantity
                                 }
                             );
                             // whenever we add a new date, we keep the dates chronological
                             ingredientInBag[0].dates = ingredientInBag[0].dates
-                                .sort((a,b) => a.date.valueOf() - b.date.valueOf());
+                                .sort((a, b) => vis.chronologicalSort(a.date, b.date));
                         }
                         if (!ingredientInBag[0].terrain.includes(forageData.terrain)) {
                             ingredientInBag[0].terrain.push(forageData.terrain);
+
+                            // add terrain to vis.filters not already there
+                            if (!vis.filters.terrain.includes(forageData.terrain)) {
+                                vis.filters.terrain.push(forageData.terrain);
+                            }
+
                             // keep terrain array sorted alphabetically
-                            ingredientInBag[0].terrain.sort((a,b) => a.localeCompare(b));
+                            ingredientInBag[0].terrain.sort((a, b) => vis.alphabeticalSort(a, b));
                         }
                         console.log(ingredientInBag[0]);
                     }
-                    
+
                     console.log(vis.ingredientBag);
                 }
             }
@@ -430,28 +533,190 @@ Herbalism.prototype.wrangleData = function(){
     if (currentSort != null) {
         let d = d3.select(currentSort).data()[0];
         if (currentSort.className == "descending") {
-            vis.ingredientBag = vis.ingredientBag.sort((b,a) => {
-                return vis.sortIngredients(a,b,false,d);
+            vis.ingredientBag = vis.ingredientBag.sort((b, a) => {
+                return vis.sortIngredients(a, b, false, d);
             });
         } else {
-            vis.ingredientBag = vis.ingredientBag.sort((a,b) => {
-                return vis.sortIngredients(a,b,true,d);
+            vis.ingredientBag = vis.ingredientBag.sort((a, b) => {
+                return vis.sortIngredients(a, b, true, d);
             });
         }
     }
-    
 
+    // sort filters
+    // "All" always appears first and Unknown always last
+    if (vis.ingredientBag.length > 0) {
+        for (const filter in vis.filters) {
+            if (filter == "rarity") {
+                vis.filters[filter].sort((a, b) => vis.customSort(vis.raritySort, a.display, b.display));
+            } else if (filter == "usage") {
+                vis.filters[filter].sort((a, b) => vis.customSort(vis.usages, a.display, b.display));
+            } else if (filter == "concoction") {
+                vis.filters[filter].sort((a, b) => vis.customSort(vis.concoctionSort, a.display, b.display));
+            } else {
+                vis.filters[filter].sort((a, b) => {
+                    if (a.display == "All") {
+                        return -1;
+                    }
+                    if (b.display == "All") {
+                        return 1;
+                    }
+                    return vis.alphabeticalSort(a.display, b.display);
+                });
+            }
+        }
+        vis.rotate();
+    }
+    vis.updateFilterVis();
+    vis.filterData();
+}
+
+/* 
+ * Filter our ingredientBag into ingredientBagDisplay based on the filters from vis.filters
+ */
+Herbalism.prototype.filterData = function () {
+    vis.ingredientBagDisplay = vis.ingredientBag.filter(function (d) {
+        let isDisplayed = true;
+        for (const filter in vis.filters) {
+            let selectedFilters = vis.filters[filter].filter((el) => el.selected == true);
+            // console.log(selectedFilters);
+            if (selectedFilters.some((el) => el.display == "All")) {
+                isDisplayed = isDisplayed && true;
+            } else if (filter == "rarity") {
+                // console.log(selectedFilters.some((el) => el.display == d.rarity));
+                isDisplayed = isDisplayed && selectedFilters.some((el) => el.display == d.rarity);
+            } else if (filter == "terrain") {
+                isDisplayed = isDisplayed && selectedFilters.some((el) => d[filter].includes(el.display));
+            } else if (d.knowledge == "none") {
+                // console.log(selectedFilters);
+                // console.log(d);
+                // console.log(vis.filters);
+                isDisplayed = isDisplayed && selectedFilters.some((el) => {
+                    // console.log(el);
+                    return el.display == "Unknown";
+                });
+            } else {
+                isDisplayed = isDisplayed && selectedFilters.some((el) => d[filter].includes(el.display));
+            }
+        }
+        return isDisplayed;
+    });
     vis.updateVis();
 }
 
-
-
 /*
- * The drawing function
+ * populate filter table with data from vis.filters (vis.rotatedFilters)
  */
 
-Herbalism.prototype.updateVis = function(){
-	let vis = this;
+Herbalism.prototype.updateFilterVis = function () {
+    let vis = this;
+
+    let tr = vis.filterTbody.selectAll('tr')
+        .data(vis.rotatedFilters)
+        .join(
+            // Styling table so rows alternate in colors
+            function (enter) {
+                return enter
+                    .append("tr")
+                // .style("background-color", (d,i) => i%2 == 0 ? columnColor : backgroundColor);        
+            },
+            function (update) {
+                return update;
+            },
+            function (exit) {
+                return exit
+                    .remove();
+            }
+        );
+
+    let td = tr
+        .selectAll("td")
+        .remove()
+        .exit()
+        .data(function (d, i) {
+            return d;
+        });
+
+    td.enter()
+        .append("td")
+        .html(function (d) {
+            return d.display;
+        })
+        .classed("selected", function (d) {
+            return d.selected;
+        })
+        .style("cursor", function (d) {
+            // don't display cursor for empty cells
+            if (d.display == "") {
+                return "unset";
+            }
+        })
+        .on("click", function (event, d) {
+            // filter table by filter value when filters are clicked
+            // we must make sure vis.filters and vis.rotatedFilters remain updated
+            
+            // can't select empty table cells
+            if (d.display != "") {
+                let allFilter = d3.selectAll("td").filter(function (c) {
+                    return c.display == "All" && c.header == d.header;
+                });
+
+                let selectedFilters = d3.selectAll("td").filter(function (c) {
+                    return c.selected == true && c.header == d.header;
+                });
+
+                // unselecting
+                if (this.classList.contains("selected")) {
+                    // don't unselect All if already selected
+                    if (d.display != "All") {
+                        // if we are unselecting the only selected value, automatically select "All"
+                        if (selectedFilters.size() == 1) {
+                            allFilter.classed("selected", function(d) {
+                                d.selected = true;
+                                return true;
+                            });
+                            vis.filters[d.header].find((element) => element.display == "All").selected = true;
+                        }
+                        this.classList.remove("selected");
+                        vis.filters[d.header].find((element) => element.display == d.display).selected = false;
+                        d.selected = false;
+                    }
+                } else {
+                    // selecting
+
+                    // if we are selecting All, automatically unselect everything else
+                    if (d.display == "All") {
+                        selectedFilters.classed("selected", function(d) {
+                            d.selected = false;
+                            return false;
+                        });
+                        let origSelected = vis.filters[d.header].filter((element) => element.selected == true);
+                        origSelected.forEach(filter => {
+                            filter.selected = false;
+                        });
+                    } else {
+                        // if we are selecting anything but "All", automatically unselect "All"
+                        allFilter.classed("selected", function(d) {
+                            d.selected = false;
+                            return false;
+                        });
+                        vis.filters[d.header].find((element) => element.display == "All").selected = false;
+                    }
+                    this.classList.add("selected");
+                    vis.filters[d.header].find((element) => element.display == d.display).selected = true;
+                    d.selected = true;
+                }
+                vis.filterData();
+            }
+        });
+}
+
+/*
+ * populate table with data from vis.ingredientBagDisplay
+ */
+
+Herbalism.prototype.updateVis = function () {
+    let vis = this;
 
     // https://stackoverflow.com/questions/1199352/smart-way-to-truncate-long-strings
     // function truncate( str, n, useWordBoundary ){
@@ -464,18 +729,18 @@ Herbalism.prototype.updateVis = function(){
 
     // populating the table with our data
     let tr = vis.tbody.selectAll('tr')
-        .data(vis.ingredientBag)
+        .data(vis.ingredientBagDisplay)
         .join(
             // Styling table so rows alternate in colors
-            function(enter) {
+            function (enter) {
                 return enter
-                .append("tr")
-                .style("background-color", (d,i) => i%2 == 0 ? columnColor : backgroundColor);        
+                    .append("tr")
+                    .style("background-color", (d, i) => i % 2 == 0 ? columnColor : backgroundColor);
             },
-            function(update) {
+            function (update) {
                 return update;
             },
-            function(exit) {
+            function (exit) {
                 return exit
                     .remove();
             }
@@ -485,7 +750,7 @@ Herbalism.prototype.updateVis = function(){
         .selectAll("td")
         .remove()
         .exit()
-        .data(function (d,i) {
+        .data(function (d, i) {
             let displayedData = vis.headers.map(function (item) {
                 display = d[item];
                 for (const el in d) {
@@ -494,10 +759,10 @@ Herbalism.prototype.updateVis = function(){
                         // format dates as dd/mm
                         let sortedDates = d[el].map((e) => e.date)
                             .map((r) => r
-                            .toLocaleString("en-US", {
-                                month: "numeric",
-                                day: "numeric"
-                        }));
+                                .toLocaleString("en-US", {
+                                    month: "numeric",
+                                    day: "numeric"
+                                }));
                         let datesString = "";
 
                         // display terrains in comma separated lists of three
@@ -555,9 +820,9 @@ Herbalism.prototype.updateVis = function(){
                             details += " " + d[el];
                             display = details;
 
-                        // display only ingredient usage in concoction
+                            // display only ingredient usage in concoction
                         } else if (d["knowledge"] == "basic") {
-                            display = details.replace(":","");
+                            display = details.replace(":", "");
                         }
                     } else if (item == "DC" && el == "DC") {
                         if (d[el] > 0) {
@@ -571,13 +836,12 @@ Herbalism.prototype.updateVis = function(){
                         display = d[el];
                     }
                 }
-                return {display: display, header: item};
+                return { display: display, header: item };
             });
             // console.log(displayedData);
-            // console.log(vis.headers[i]);
             return displayedData;
         });
-    
+
     td.enter()
         .append("td")
         .html(function (d) {
@@ -585,58 +849,6 @@ Herbalism.prototype.updateVis = function(){
         })
         .classed("number-td", function (d) {
             return d.header == "Qty" || d.header == "DC" ? true : false;
-        });
-
-    // // ---- DRAW BARS ----
-    // var bars = vis.svg.selectAll(".bar")
-    //     .remove()
-    //     .exit()
-    //     .data(vis.filteredData)
-
-    // bars.enter()
-    //     .append("rect")
-    //     .attr("class", "bar")
-    //     .attr("x", function(d){ return vis.x(d.AgeAsOf2015); })
-    //     .attr("y", function(d){ return vis.y(d.n); })
-    //     .attr("height", function(d){ return vis.height - vis.y(d.n); })
-    //     .attr("fill", function(d){ return vis.colorScale(d.n); })
-    //     .attr("width", vis.x.bandwidth())
-    //     .on("mouseover", function(event, d) {
-    //         console.log(d3.select("#" + vis.parentElement + " .age-count").node())
-    //         d3.select("#" + vis.parentElement + " .age-count")
-    //             .text(d.n + " dogs");
-    //     })
-    //     .on("mouseout", function(event, d) {
-    //         d3.select("#" + vis.parentElement + " .age-count")
-    //             .text("hover for age count");
-    //     });
-
-    // // ---- DRAW AXIS	----
-    // vis.xAxisGroup = vis.svg.select(".x-axis")
-    //     .attr("transform", "translate(0," + vis.height + ")")
-    //     .call(vis.xAxis);
-
-    // vis.yAxisGroup = vis.svg.select(".y-axis")
-    //     .call(vis.yAxis);
-
-    // vis.svg.select("text.axis-title").remove();
-    // vis.svg.append("text")
-    //     .attr("class", "axis-title")
-    //     // .attr("x", -5)
-    //     // .attr("y", vis.height/2)
-    //     // .attr("dy", ".1em")
-    //     .style("text-anchor", "middle")
-    //     // .attr("transform", "rotate(-90)")
-    //     .attr("transform", "rotate(-90) translate(" + -vis.height/2 + "," + -45 + ")")
-    //     .text("count");
-
-    // vis.svg.append("text")
-    //     .attr("class", "axis-title")
-    //     .attr("y", vis.height + 35)
-    //     .attr("x", vis.width/2)
-    //     // .attr("dy", ".1em")
-    //     .style("text-anchor", "middle")
-    //     // .attr("transform", "rotate(-90)")
-    //     // .attr("transform", "rotate(-90) translate(" + -vis.height/2 + "," + -45 + ")")
-    //     .text("age");
+        })
+       
 }
