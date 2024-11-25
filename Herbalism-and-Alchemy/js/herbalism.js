@@ -34,6 +34,7 @@ Herbalism.prototype.initVis = function () {
         rarity: [ vis.createAFilter(true, "All") ],
         usage: [ vis.createAFilter(true, "All") ]
     };
+    vis.filterDisplay = structuredClone(vis.filters);
     
     vis.rotatedFilters = [];
 
@@ -114,6 +115,11 @@ Herbalism.prototype.initVis = function () {
             "additionalRule": additionalRule
         };
     }
+
+    setClickListener(downloadIcon, function (e) {
+        let csv = encodeURI("data:text/csv;charset=utf-8," + d3.csvFormat(vis.ingredientBag));
+        window.open(csv);
+    })
 
     // the rarity and details section have custom sort orders
     vis.raritySort = ["All", "Common", "Uncommon", "Rare", "Very Rare", "Legendary"];
@@ -251,18 +257,19 @@ Herbalism.prototype.initVis = function () {
      */
     
     vis.rotate = function(){
+        vis.rotatedFilters = [];
         let i = 0;
         let pau = 0;
-        while (pau < Object.keys(vis.filters).length) {
+        while (pau < Object.keys(vis.filterDisplay).length) {
             vis.rotatedFilters[i] = [];
-            for (const filter in vis.filters) {
-                if (i < vis.filters[filter].length) {
+            for (const filter in vis.filterDisplay) {
+                if (i < vis.filterDisplay[filter].length) {
                     vis.rotatedFilters[i].push({
-                        display: vis.filters[filter][i].display,
+                        display: vis.filterDisplay[filter][i].display,
                         header: filter,
-                        selected: vis.filters[filter][i].selected
+                        selected: vis.filterDisplay[filter][i].selected
                     });
-                    if (i == vis.filters[filter].length - 1) {
+                    if (i == vis.filterDisplay[filter].length - 1) {
                         pau++;
                     }
                 } else {
@@ -276,6 +283,7 @@ Herbalism.prototype.initVis = function () {
             i++;
         }
     }
+
     vis.rotate();
     vis.updateFilterVis();
 }
@@ -569,8 +577,6 @@ Herbalism.prototype.wrangleData = function () {
                 }
             });
 
-            console.log(vis.filters);
-
             if (filter == "rarity") {
                 vis.filters[filter].sort((a, b) => vis.customSort(vis.raritySort, a.display, b.display));
             } else if (filter == "usage") {
@@ -590,6 +596,7 @@ Herbalism.prototype.wrangleData = function () {
                 });
             }
         }
+        vis.filterDisplay = structuredClone(vis.filters);
         vis.rotate();
     }
     vis.updateFilterVis();
@@ -637,7 +644,6 @@ Herbalism.prototype.updateFilterVis = function () {
             function (enter) {
                 return enter
                     .append("tr")
-                // .style("background-color", (d,i) => i%2 == 0 ? columnColor : backgroundColor);        
             },
             function (update) {
                 return update;
@@ -695,9 +701,11 @@ Herbalism.prototype.updateFilterVis = function () {
                                 return true;
                             });
                             vis.filters[d.header].find((element) => element.display == "All").selected = true;
+                            vis.filterDisplay[d.header].find((element) => element.display == "All").selected = true;
                         }
                         this.classList.remove("selected");
                         vis.filters[d.header].find((element) => element.display == d.display).selected = false;
+                        vis.filterDisplay[d.header].find((element) => element.display == d.display).selected = false;
                         d.selected = false;
                     }
                 } else {
@@ -713,6 +721,10 @@ Herbalism.prototype.updateFilterVis = function () {
                         origSelected.forEach(filter => {
                             filter.selected = false;
                         });
+                        let origDisplaySelected = vis.filterDisplay[d.header].filter((element) => element.selected == true);
+                        origDisplaySelected.forEach(filter => {
+                            filter.selected = false;
+                        });
                     } else {
                         // if we are selecting anything but "All", automatically unselect "All"
                         allFilter.classed("selected", function(d) {
@@ -720,13 +732,38 @@ Herbalism.prototype.updateFilterVis = function () {
                             return false;
                         });
                         vis.filters[d.header].find((element) => element.display == "All").selected = false;
+                        vis.filterDisplay[d.header].find((element) => element.display == "All").selected = false;
                     }
                     this.classList.add("selected");
                     vis.filters[d.header].find((element) => element.display == d.display).selected = true;
+                    vis.filterDisplay[d.header].find((element) => element.display == d.display).selected = true;
                     d.selected = true;
                 }
-                vis.updateFilterVis();
                 vis.filterData();
+                // vis.filterDisplay = structuredClone(vis.filters);
+                for (const filter in vis.filterDisplay) {
+                    if (filter != d.header) {
+                        vis.filterDisplay[filter] = vis.filters[filter].filter((el) => {
+                            if (el.display == "All") {
+                                return true;
+                            }
+                            return vis.ingredientBagDisplay.some((ingredient) => {
+                                if (typeof ingredient[filter] == "object") {
+                                    if (filter == "concoction" && ingredient["knowledge"] == "none") {
+                                        return el.display == "Unknown";
+                                    }
+                                    return ingredient[filter].includes(el.display);
+                                }
+                                return ingredient[filter] == el.display;
+                            });
+                        });
+                    }
+                }
+                vis.rotate();
+                vis.updateFilterVis();
+                console.log(vis.filterDisplay);
+                console.log(vis.filters);
+                console.log(vis.rotatedFilters);
             }
         });
 }

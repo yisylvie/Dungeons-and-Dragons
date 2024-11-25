@@ -1,6 +1,7 @@
 const submit = document.getElementById("submit");
 const today = document.getElementById("today");
 const forageForm = document.getElementById("forage-form");
+const downloadIcon = document.querySelector(".download");
 // const startDateInput = document.getElementById("start-date");
 // const endDateInput = document.getElementById("end-date");
 const terrainInput = document.getElementById("terrain");
