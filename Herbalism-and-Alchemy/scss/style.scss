@@ -9,10 +9,22 @@
 //      compiles anything in "sass" folder to "css" folder
 
 @use "sass:math";
-
 @use "fonts";
 
-@import url(../css/bootstrap.min.css);
+// bootstrap dependencies
+// scss-docs-start import-stack
+// Configuration
+@import "bootstrap/functions";
+@import "bootstrap/variables";
+@import "bootstrap/maps";
+@import "bootstrap/mixins";
+@import "bootstrap/utilities";
+
+// Layout & components
+@import "bootstrap/root";
+@import "bootstrap/reboot";
+@import "bootstrap/tooltip";
+@import "bootstrap/forms/form-check";
 
 $translate500: translate(-50%, 0%);
 $translate5050: translate(-50%, -50%);
@@ -22,19 +34,29 @@ $backgroundColor1: #FAF6EC;
 $backgroundColor2: #f4ecd8;
 
 $secondaryBackgroundColor: #E0E5C0;
+$secondaryBackgroundColor1: #d1d99c;
 $secondaryBackgroundColor2: #bac37f;
+$secondaryBackgroundColor3: shade-color($secondaryBackgroundColor2, 10%);
+
 $columnColor: #f0e4cb;
 
-$horLine: #CBAF68;
 $horLine1: #dfcea1;
+$horLine2: #CBAF68;
+$horLine3: shade-color($horLine2, 10%);
 
 $textColor1: #58170D;
 
-$border0: $horLine1 solid .08rem;
-$border1: $horLine solid .1rem;
+$borderWidth0: .08rem;
+$border0: $horLine1 solid $borderWidth0;
+$border1: $horLine2 solid .1rem;
 
 $borderRadius: .15rem;
 $borderRadius1: .2rem;
+
+$transitionDuration: .1s;
+
+$btn-transition: color $transitionDuration ease-in-out, background-color $transitionDuration ease-in-out, border-color $transitionDuration ease-in-out, box-shadow $transitionDurations ease-in-out !default;
+$border-transition: border-color 0s, border-width $transitionDuration ease-in-out;
 
 @mixin centerFillWidth() {
     width: -webkit-fill-available;
@@ -47,6 +69,10 @@ $borderRadius1: .2rem;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+
+@function heightWithPadding($height, $padding, $padding-bottom: $padding) {
+    @return calc($height + $padding + $padding-bottom);
 }
 
 @mixin button($height, $font-size, $color, $background, $border, $borderColor) {
@@ -63,7 +89,7 @@ $borderRadius1: .2rem;
 }
 
 @mixin inputBox($font-size, $line-height) {
-    @include button($line-height, $font-size, black, $backgroundColor, true, $horLine);
+    @include button($line-height, $font-size, black, $backgroundColor, true, $horLine2);
 }
 
 :root {
@@ -104,14 +130,15 @@ button, input[type="submit"] {
 }
 
 .tooltip {
-    // --bs-tooltip-padding-x: 0.5rem;
-    // --bs-tooltip-padding-y: 0.25rem;
-    --bs-tooltip-font-size: 0.75rem;
-    --bs-tooltip-color: black;
-    --bs-tooltip-bg: #bac37f;
-    --bs-tooltip-border-radius: .15rem;
+    font-size: 0.75rem;
+
+    --#{$prefix}tooltip-padding-x: 0.5rem;
+    --#{$prefix}tooltip-padding-y: 0.25rem;
+    --#{$prefix}tooltip-color: black;
+    --#{$prefix}tooltip-bg: #{$secondaryBackgroundColor1};
+    --#{$prefix}tooltip-border-radius: .15rem;
     font-family: fonts.$Bookinsanity;
-    // line-height: 1.5;
+    line-height: 1.5;
     .tooltip-inner {
         text-align: left;
     }
@@ -142,17 +169,50 @@ svg {
         font-family: fonts.$ScalySansCaps;
         color: $textColor1;
 
-        h1 {
+        .menu-item {
             width: max-content;
             font-size: inherit;
-            padding: 0 1.2em;
             line-height: 1.6em;
+            height: 100%;
             cursor: pointer;
+            position: relative;
+
+            h1{
+                font-size: inherit;
+                font-weight: inherit;
+                width: max-content;
+            }
+
+            .hidden {
+                display: unset;
+                opacity: 0;
+                padding: 0 1.2em;
+            }
+
+            .shown {
+                @include absoluteCenter();
+            }
+
+            .menu-decoration {
+                @include transition($border-transition);
+                border-color: $horLine2;
+                width: 100%;
+                position: absolute;
+                bottom: -$borderWidth0;
+            }
         }
 
         .selected {
-            border-bottom: $horLine solid 0.15rem;
+            .menu-decoration {
+                border-bottom: $horLine2 solid 0.15rem;
+            }
             font-weight: bold;
+        }
+
+        .menu-item:hover {
+            .menu-decoration{
+                border-bottom: $horLine2 solid 0.2rem;
+            }
         }
 
         border-bottom: $border0;
@@ -194,7 +254,13 @@ svg {
             button, input[type="submit"] {
                 // padding: 0 1em;
                 padding: .375em .75em;
-                @include button(1.5, inherit, white, $secondaryBackgroundColor2, false, $secondaryBackgroundColor2);
+                @include button(1.5em, inherit, white, $secondaryBackgroundColor2, false, $secondaryBackgroundColor2);
+                height: unset;
+                @include transition($btn-transition);
+            }
+
+            button:hover, input[type="submit"]:hover {
+                background-color: $secondaryBackgroundColor3;
             }
 
             input[type="submit"] {
@@ -299,16 +365,21 @@ svg {
 
                 svg {
                     vertical-align: top;
-                    fill: $horLine;
+                    fill: $horLine2;
                 }
 
                 #today {
-                    background-color: $horLine;
+                    background-color: $horLine2;
                     color: white;
                     border-radius: 0;
                     padding-top: 0;
                     padding-bottom: 0;
                     line-height: 2em;
+                }
+
+                #today:hover {
+                    background-color: $horLine3;
+                    border-radius: 0 .11em .11em 0;
                 }
             }
 
@@ -338,26 +409,41 @@ svg {
                 display: flex;
             }
             menu {
-                font-family: fonts.$ScalySans;
+                font-size: .9rem;
+                font-family: fonts.$ScalySansCaps;
                 display: flex;
-                gap: 2em;
+                gap: .7em;
                 margin-right: 1.2em;
 
                 li {
-                    font-size: .8rem;
+                    transition: width 1s;
+
+                    border-radius: calc(heightWithPadding(1.3em, .3em) / 2);
+                    font-size: inherit;
                     cursor: pointer;
                     display: flex;
                     align-items: center;
-                    height: 1.2em;
+                    height: heightWithPadding(1.3em, .3em);
+                    line-height: 1.3em;
                     padding: .3em;
-                    gap:.3em;
-                    border: $horLine solid .1rem;
-                    border-radius: $borderRadius1;
+                    gap: 0.4em;
+                    
                     h2 {
+                        display: none;
                         width: max-content;
                         font-size: inherit;
                     }
                 }
+
+                li:hover {
+                    color: white;
+                    background-color: $textColor1;
+                    padding-right: .6em;
+                    h2 {
+                        display: unset;
+                    }
+                }
+
                 .img-only {
                     height: 1.7em;
                     padding: 0;

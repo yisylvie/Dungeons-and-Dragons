@@ -2,6 +2,7 @@ const submit = document.getElementById("submit");
 const today = document.getElementById("today");
 const forageForm = document.getElementById("forage-form");
 const downloadIcon = document.querySelector(".download");
+const filterIcon = document.querySelector(".filter");
 // const startDateInput = document.getElementById("start-date");
 // const endDateInput = document.getElementById("end-date");
 const terrainInput = document.getElementById("terrain");
@@ -31,7 +32,7 @@ const tooltipTriggerList = document.querySelectorAll("[data-bs-toggle='tooltip']
 const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl, {
     boundary: forageForm,
     // container: forageForm,
-    fallbackPlacements: ["left", "right", "top", "bottom"],
+    fallbackPlacements: ["right", "left", "top", "bottom"],
     // trigger: "click"
 }));
 
@@ -45,7 +46,7 @@ const datePicker = flatpickr("#date-input-div", {
     //     return moment(datestr,format, true).toDate();
     // },
     enableTime: false,
-    // allowInput: true,
+    allowInput: true,
     defaultHour: 0,
     defaultTime: 0,
     clickOpens: false,

@@ -116,9 +116,17 @@ Herbalism.prototype.initVis = function () {
         };
     }
 
+    // download a csv file on click of downloadIcon
     setClickListener(downloadIcon, function (e) {
         let csv = encodeURI("data:text/csv;charset=utf-8," + d3.csvFormat(vis.ingredientBag));
         window.open(csv);
+    })
+
+    // show/hide filters on click of filterIcon
+    setClickListener(filterIcon, function (e) {
+        vis.filterTable.classed("hidden", function(d) {
+            return !this.classList.contains("hidden");
+        });
     })
 
     // the rarity and details section have custom sort orders
