@@ -88,8 +88,16 @@ $border-transition: border-color 0s, border-width $transitionDuration ease-in-ou
     line-height: $height;
 }
 
+@mixin inputBoxFocus() {
+    &:focus {
+        outline: 0;
+        box-shadow: 0 0 0.08em 0.12rem #cbaf6891;
+    }
+}
+
 @mixin inputBox($font-size, $line-height) {
     @include button($line-height, $font-size, black, $backgroundColor, true, $horLine2);
+    @include inputBoxFocus();
 }
 
 :root {
@@ -108,7 +116,7 @@ body {
 }
 
 // zeroing out
-h1, h2, h3, h4, h5, p, ol, ul, li, a, button, small, th, menu, input[type="submit"] {
+h1, h2, h3, h4, h5, p, ol, ul, li, a, button, small, th, menu, input[type="submit"], label {
     margin: 0;
     padding: 0;
     color: inherit;
@@ -155,6 +163,36 @@ svg {
 
 .hidden {
     display: none;
+}
+
+// remove default checkbox and add custom one
+input[type="checkbox"] {
+    --#{$prefix}form-check-bg: #{$form-check-input-bg};
+
+    width: $form-check-input-width;
+    height: $form-check-input-width;
+    margin-top: ($line-height-base - $form-check-input-width) * .5; // line-height minus check height
+    vertical-align: top;
+    appearance: none;
+    background-color: $backgroundColor;
+    background-image: var(--#{$prefix}form-check-bg-image);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    border: $border1;
+    border-radius: $borderRadius;
+    
+    @include inputBoxFocus();
+    
+    &:active {
+        filter: $form-check-input-active-filter;
+    }
+
+    &:checked {
+        background-color: $horLine2;
+        border-color: $horLine2;
+        --#{$prefix}form-check-bg-image: #{escape-svg($form-check-input-checked-bg-image)};
+    }
 }
 
 #everything {
@@ -237,22 +275,13 @@ svg {
             }
     
             select,input {
-                // background: $backgroundColor;
-                // font-size: unset;
-                font-family: unset;
-                // border: none;
-            }
-
-            input[type="checkbox" i] {
-                // display: none;
-                cursor: pointer;
+                // font-family: unset;
             }
             
             $padding: 1em;
             $line-height: 2em;
             
             button, input[type="submit"] {
-                // padding: 0 1em;
                 padding: .375em .75em;
                 @include button(1.5em, inherit, white, $secondaryBackgroundColor2, false, $secondaryBackgroundColor2);
                 height: unset;
@@ -292,32 +321,9 @@ svg {
                 padding-right: .3em;
                 line-height: 1.7em;
 
-                // div:hover .tooltip {
-                //     display: block;
-                // }
-
                 // info/tip div
                 div {
                     position: relative;
-                    .tooltip {
-                        display: none;
-                    //     position: absolute;
-                    //     background-color: #E0E5C0;
-                    //     width: 11em;
-                    //     font-size: 0.7rem;
-                    //     left: 50%;
-                    //     transform: translate(-50%, 0%);
-                    //     top: 126%;
-                    //     z-index: 1;
-                    //     padding: 0.3em 0.8em;
-                    //     line-height: 1.3em;
-                    //     border: hsl(68, 42%, 50%) solid .05em;
-                    //     border-radius: .15em;
-
-                    //     small {
-                    //         font-size: inherit;
-                    //     }
-                    }
 
                     svg {
                         display: block;
@@ -351,6 +357,7 @@ svg {
                     font-size: inherit;
                     font-family: inherit;
                     background-color: inherit;
+                    @include inputBoxFocus();
                 }
 
                 .svg-div {

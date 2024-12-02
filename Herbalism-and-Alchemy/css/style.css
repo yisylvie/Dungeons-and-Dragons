@@ -907,7 +907,7 @@ body {
   height: 100vh;
 }
 
-h1, h2, h3, h4, h5, p, ol, ul, li, a, button, small, th, menu, input[type=submit] {
+h1, h2, h3, h4, h5, p, ol, ul, li, a, button, small, th, menu, input[type=submit], label {
   margin: 0;
   padding: 0;
   color: inherit;
@@ -953,6 +953,34 @@ svg {
 
 .hidden {
   display: none;
+}
+
+input[type=checkbox] {
+  --bs-form-check-bg: var(--bs-body-bg);
+  width: 1em;
+  height: 1em;
+  margin-top: 0.25em;
+  vertical-align: top;
+  appearance: none;
+  background-color: #fcf9f2;
+  background-image: var(--bs-form-check-bg-image);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  border: #CBAF68 solid 0.1rem;
+  border-radius: 0.15rem;
+}
+input[type=checkbox]:focus {
+  outline: 0;
+  box-shadow: 0 0 0.08em 0.12rem rgba(203, 175, 104, 0.568627451);
+}
+input[type=checkbox]:active {
+  filter: brightness(90%);
+}
+input[type=checkbox]:checked {
+  background-color: #CBAF68;
+  border-color: #CBAF68;
+  --bs-form-check-bg-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3e%3c/svg%3e");
 }
 
 #everything {
@@ -1029,12 +1057,6 @@ svg {
 #everything #side-panel form > div {
   margin-bottom: 0.4em;
 }
-#everything #side-panel form select, #everything #side-panel form input {
-  font-family: unset;
-}
-#everything #side-panel form input[type=checkbox i] {
-  cursor: pointer;
-}
 #everything #side-panel form button, #everything #side-panel form input[type=submit] {
   padding: 0.375em 0.75em;
   border-radius: 0.2rem;
@@ -1079,6 +1101,10 @@ svg {
   padding-left: 0.5em;
   text-align: right;
 }
+#everything #side-panel form select:focus {
+  outline: 0;
+  box-shadow: 0 0 0.08em 0.12rem rgba(203, 175, 104, 0.568627451);
+}
 #everything #side-panel form label {
   display: inline-flex;
   align-items: center;
@@ -1088,9 +1114,6 @@ svg {
 }
 #everything #side-panel form label div {
   position: relative;
-}
-#everything #side-panel form label div .tooltip {
-  display: none;
 }
 #everything #side-panel form label div svg {
   display: block;
@@ -1115,6 +1138,10 @@ svg {
   display: inline-flex;
   align-items: center;
 }
+#everything #side-panel form #date-input-div:focus {
+  outline: 0;
+  box-shadow: 0 0 0.08em 0.12rem rgba(203, 175, 104, 0.568627451);
+}
 #everything #side-panel form #date-input-div #date-input {
   width: 100%;
   text-align: center;
@@ -1126,6 +1153,10 @@ svg {
   font-size: inherit;
   font-family: inherit;
   background-color: inherit;
+}
+#everything #side-panel form #date-input-div #date-input:focus {
+  outline: 0;
+  box-shadow: 0 0 0.08em 0.12rem rgba(203, 175, 104, 0.568627451);
 }
 #everything #side-panel form #date-input-div .svg-div {
   height: 2em;
