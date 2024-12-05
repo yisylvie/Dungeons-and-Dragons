@@ -48,7 +48,7 @@ Herbalism.prototype.initVis = function () {
     vis.table = d3.select("#" + vis.parentElement).append("table").attr("id", "ingredient-bag-table");
 
     // populate our header with categories
-    vis.thead = vis.table.append("thead")
+    vis.theadTr = vis.table.append("thead")
         .append("tr")
         .selectAll("th")
         .data(vis.categories)
@@ -56,7 +56,7 @@ Herbalism.prototype.initVis = function () {
         .append("th")
         .html(function (d) {
             if (d.display == "checkbox") {
-                return "<input type='checkbox'>";
+                return "<input type='checkbox' tabindex='0'>";
             }
             return "<div><strong>" + d.display + "</strong>" + "<svg version='1.1' id='Layer_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' width='31.806px' height='17.917px' viewBox='0 0 31.806 17.917' enable-background='new 0 0 31.806 17.917' xml:space='preserve'><path fill='currentColor' d='M31.292,3.084l-14.417,14.43c-0.148,0.148-0.301,0.252-0.458,0.312c-0.158,0.061-0.329,0.091-0.514,0.091 s-0.356-0.03-0.514-0.09c-0.157-0.06-0.31-0.164-0.458-0.312L0.5,3.084C0.167,2.75,0,2.329,0,1.82s0.171-0.935,0.514-1.278 C0.875,0.181,1.301,0,1.792,0C2.283,0,2.709,0.181,3.07,0.542l12.833,12.833L28.736,0.542c0.352-0.352,0.775-0.523,1.271-0.514 c0.495,0.009,0.914,0.185,1.257,0.528c0.361,0.361,0.542,0.787,0.542,1.278C31.806,2.324,31.634,2.741,31.292,3.084z'/></svg></div>";
         })
@@ -226,7 +226,7 @@ Herbalism.prototype.initVis = function () {
     }
 
     // sort table by column value when headers are clicked
-    vis.thead.on("click", function (event, d) {        
+    vis.theadTr.on("click", function (event, d) {        
         // if it's already sorted in ascending order, sort in descending order 
         // otherwise sort in ascending
         // don't sort the checks
@@ -257,12 +257,16 @@ Herbalism.prototype.initVis = function () {
     });
 
     // check or uncheck all checks when header check is checked
-    vis.thead.select("input").on("change", function (event, d) {
+    vis.theadTr.select("input").on("change", function (event, d) {
         if (this.checked) {
+            console.log(this);
+            console.log(this.parentNode.parentNode);
+            this.parentNode.parentNode.classList.add("checked");
             vis.ingredientBag.forEach(ingredient => {
                 ingredient.checked = true;
             });
         } else {
+            this.parentNode.parentNode.classList.remove("checked");
             vis.ingredientBag.forEach(ingredient => {
                 ingredient.checked = false;
             });
@@ -789,9 +793,9 @@ Herbalism.prototype.updateFilterVis = function () {
                 }
                 vis.rotate();
                 vis.updateFilterVis();
-                console.log(vis.filterDisplay);
-                console.log(vis.filters);
-                console.log(vis.rotatedFilters);
+                // console.log(vis.filterDisplay);
+                // console.log(vis.filters);
+                // console.log(vis.rotatedFilters);
             }
         });
 }
@@ -833,7 +837,6 @@ Herbalism.prototype.updateVis = function () {
             }
         )
         .classed("checked", function (d) {
-            console.log(d);
             return d.checked;
         });
 
@@ -957,16 +960,21 @@ Herbalism.prototype.updateVis = function () {
         })
         .append("input")
         .attr("type", "checkbox")
+        .attr("tabindex", "0")
         .property("checked", function (d) {
             return d.display;
         })
         .on("change", function (event, d) {
+            // unselect header checkbox if unselecting an item
+            if (!this.checked) {
+                vis.theadTr.classed("checked", false);
+                vis.theadTr.select("input").property("checked", false);
+            }
             // make sure our data remains up to date with checked state
             d.display = this.checked;
             // parent of the parent is the tr surrounding the td with this checkbox
             let thisTr = this.parentNode.parentNode;
             this.checked ? thisTr.classList.add("checked") : thisTr.classList.remove("checked");
             d3.select(thisTr).data()[0].checked = this.checked;
-            console.log(vis.ingredientBag);
         });
 }

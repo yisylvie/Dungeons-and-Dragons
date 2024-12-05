@@ -933,7 +933,7 @@ button, input[type=submit] {
   --bs-tooltip-padding-x: 0.5rem;
   --bs-tooltip-padding-y: 0.25rem;
   --bs-tooltip-color: black;
-  --bs-tooltip-bg: #d2d9ae;
+  --bs-tooltip-bg: #d9dfb7;
   --bs-tooltip-border-radius: .15rem;
   font-family: "Bookinsanity", arial, helvetica, sans-serif;
   line-height: 1.35em;
@@ -978,12 +978,14 @@ input[type=checkbox]:hover {
   border-color: #CBAF68;
   z-index: 1;
 }
+input[type=checkbox]:checked {
+  background-color: #CBAF68;
+  border-color: #CBAF68;
+}
 input[type=checkbox]:active {
   filter: brightness(95%);
 }
 input[type=checkbox]:checked {
-  background-color: #CBAF68;
-  border-color: #CBAF68;
   background-image: url("data:image/svg+xml;utf8,%3csvg width='8' height='9' viewBox='0 0 8 9' fill='%23fcf9f2' xmlns='http://www.w3.org/2000/svg'%3e%3cpath fill-rule='evenodd' clip-rule='evenodd' d='M7.45923 2.04036C7.71307 2.2942 7.71307 2.70575 7.45923 2.95959L3.45923 6.9596C3.20539 7.21344 2.79383 7.21344 2.53999 6.9596L0.53999 4.95959C0.286149 4.70575 0.286149 4.2942 0.53999 4.04036C0.793831 3.78652 1.20539 3.78652 1.45923 4.04036L2.99961 5.58074L6.53999 2.04036C6.79383 1.78652 7.20539 1.78652 7.45923 2.04036Z'/%3e%3c/svg%3e");
 }
 
@@ -1143,6 +1145,20 @@ input[type=checkbox]:checked {
 }
 #everything #side-panel form input[type=checkbox] {
   margin-top: 0.35em;
+}
+#everything #side-panel form input[type=checkbox]:focus {
+  border-color: #CBAF68;
+  outline: 0;
+  box-shadow: 0 0 0.08em 0.12rem rgba(203, 175, 104, 0.568627451);
+  z-index: 1;
+}
+#everything #side-panel form input[type=checkbox]:hover {
+  border-color: #CBAF68;
+  z-index: 1;
+}
+#everything #side-panel form input[type=checkbox]:checked {
+  background-color: #CBAF68;
+  border-color: #CBAF68;
 }
 #everything #side-panel form #date-input-div {
   box-sizing: content-box;
@@ -1338,16 +1354,28 @@ input[type=checkbox]:checked {
 #everything #main #ingredient-bag #ingredient-bag-table tr {
   background-color: #fcf9f2;
 }
-#everything #main #ingredient-bag #ingredient-bag-table .checked {
-  background-color: #E0E5C0;
-  background-color: #d2d9ae;
-  background-color: #d2d9ae;
+#everything #main #ingredient-bag #ingredient-bag-table .checked input[type=checkbox]:focus {
+  border-color: #bac37f;
+  outline: 0;
+  box-shadow: 0 0 0.08em 0.12rem #ecefd9;
+  z-index: 1;
+}
+#everything #main #ingredient-bag #ingredient-bag-table .checked input[type=checkbox]:hover {
+  border-color: #bac37f;
+  z-index: 1;
+}
+#everything #main #ingredient-bag #ingredient-bag-table .checked input[type=checkbox]:checked {
+  background-color: #bac37f;
+  border-color: #bac37f;
+}
+#everything #main #ingredient-bag #ingredient-bag-table thead .checked input[type=checkbox]:focus {
+  box-shadow: 0 0 0.08em 0.12rem #d9dfb7;
+}
+#everything #main #ingredient-bag #ingredient-bag-table tbody .checked {
   background-color: #d9dfb7;
-  box-shadow: 0 0 0.08rem 0.08rem rgb(186, 195, 127);
-  /* box-shadow: 0 0 0em 0.08rem rgb(186 195 127); */
+  box-shadow: 0 0 0.08rem 0.08rem #bac37f;
   z-index: 0;
   position: relative;
-  border: #bac37f solid 0.08rem;
 }
 #everything #main #ingredient-bag #filter-table {
   background-color: #dfcea1;

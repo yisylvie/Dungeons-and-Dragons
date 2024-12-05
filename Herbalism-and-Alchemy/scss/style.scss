@@ -35,7 +35,7 @@ $backgroundColor2: #f4ecd8;
 
 $secondaryBackgroundColor: #E0E5C0;
 // $secondaryBackgroundColor1: #d1d99c;
-$secondaryBackgroundColor1: #d2d9ae;
+$secondaryBackgroundColor1: #d9dfb7;
 $secondaryBackgroundColor2: #bac37f;
 $secondaryBackgroundColor3: shade-color($secondaryBackgroundColor2, 10%);
 
@@ -44,6 +44,10 @@ $columnColor: #f0e4cb;
 $horLine1: #dfcea1;
 $horLine2: #CBAF68;
 $horLine3: shade-color($horLine2, 10%);
+
+$boxShadow: 0 0 0.08em 0.12rem #cbaf6891;
+$secondaryBoxShadow: 0 0 0.08em 0.12rem tint-color($secondaryBackgroundColor, 40%);
+$secondaryBoxShadow2: 0 0 0.08em 0.12rem $secondaryBackgroundColor1;
 
 $textColor1: #58170D;
 
@@ -97,15 +101,15 @@ $border-transition: border-color 0s, border-width $transitionDuration ease-in-ou
     @return $font-size * $em;
 }
 
-@mixin button($height, $fontSize, $color, $background, $border, $borderColor) {
+@mixin button($height, $font-size, $color, $background, $border, $border-color) {
     @if $border{
-        border: border1($borderColor);
+        border: border1($border-color);
     }
     border-radius: $borderRadius1;
     height: $height;
     background-color: $background;
     color: $color;
-    font-size: $fontSize;
+    font-size: $font-size;
     line-height: $height;
 }
 
@@ -115,15 +119,15 @@ $border-transition: border-color 0s, border-width $transitionDuration ease-in-ou
     }
 }
 
-@mixin inputBoxFocus() {
+@mixin inputBoxFocus($border-color: $horLine2, $box-shadow: $boxShadow) {
     &:focus {
-        border-color: $horLine2;
+        border-color: $border-color;
         outline: 0;
-        box-shadow: 0 0 0.08em 0.12rem #cbaf6891;
+        box-shadow: $box-shadow;
         z-index: 1;
     }
     &:hover {
-        border-color: $horLine2;
+        border-color: $border-color;
         z-index: 1;
     }
 }
@@ -131,6 +135,15 @@ $border-transition: border-color 0s, border-width $transitionDuration ease-in-ou
 @mixin inputBox($font-size, $line-height) {
     @include button($line-height, $font-size, black, $backgroundColor, true, $horLine1);
     @include inputBoxFocus();
+}
+
+@mixin checkedBox($background-color, $box-shadow) {
+    @include inputBoxFocus($background-color, $box-shadow);
+
+    &:checked {
+        background-color: $background-color;
+        border-color: $background-color;
+    }
 }
 
 :root {
@@ -211,13 +224,15 @@ input[type="checkbox"] {
     border: border1();
     border-radius: $borderRadius;
     cursor: pointer;
+
+    @include checkedBox($horLine2, $boxShadow);
     
-    @include inputBoxFocus();
+    // @include inputBoxFocus();
     @include active();
 
     &:checked {
-        background-color: $horLine2;
-        border-color: $horLine2;
+        // background-color: $horLine2;
+        // border-color: $horLine2;
         background-image: #{escape-svg(url("data:image/svg+xml;utf8,<svg width='8' height='9' viewBox='0 0 8 9' fill='#{$backgroundColor}' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' clip-rule='evenodd' d='M7.45923 2.04036C7.71307 2.2942 7.71307 2.70575 7.45923 2.95959L3.45923 6.9596C3.20539 7.21344 2.79383 7.21344 2.53999 6.9596L0.53999 4.95959C0.286149 4.70575 0.286149 4.2942 0.53999 4.04036C0.793831 3.78652 1.20539 3.78652 1.45923 4.04036L2.99961 5.58074L6.53999 2.04036C6.79383 1.78652 7.20539 1.78652 7.45923 2.04036Z'/></svg>"))};
     }
 }
@@ -381,6 +396,7 @@ input[type="checkbox"] {
             }
 
             input[type="checkbox"] {
+                @include checkedBox($horLine2, $boxShadow);
                 @include topMarginCenterItem($labelLineHeight, $form-check-input-width); // line-height minus check height
             }
 
@@ -582,15 +598,22 @@ input[type="checkbox"] {
                 }
 
                 .checked {
-                    background-color: $secondaryBackgroundColor;
-                    background-color: $secondaryBackgroundColor1;
-                    background-color: #d2d9ae;
-                    background-color: mix(#d2d9ae, $secondaryBackgroundColor);
-                    box-shadow: 0 0 0.08rem 0.08rem rgb(186 195 127);
-                    /* box-shadow: 0 0 0em 0.08rem rgb(186 195 127); */
-                    z-index: 0;
-                    position: relative;
-                    border: border0($secondaryBackgroundColor2);
+                    input[type="checkbox"]{
+                        @include checkedBox($secondaryBackgroundColor2, $secondaryBoxShadow);
+                    }
+                }
+
+                thead .checked input[type="checkbox"]:focus {
+                    box-shadow: $secondaryBoxShadow2;
+                }
+
+                tbody {
+                    .checked {
+                        background-color: $secondaryBackgroundColor1;
+                        box-shadow: 0 0 $borderWidth0 $borderWidth0 $secondaryBackgroundColor2;
+                        z-index: 0;
+                        position: relative;
+                    }    
                 }
             }
 
