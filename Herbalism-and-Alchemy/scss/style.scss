@@ -34,7 +34,8 @@ $backgroundColor1: #FAF6EC;
 $backgroundColor2: #f4ecd8;
 
 $secondaryBackgroundColor: #E0E5C0;
-$secondaryBackgroundColor1: #d1d99c;
+// $secondaryBackgroundColor1: #d1d99c;
+$secondaryBackgroundColor1: #d2d9ae;
 $secondaryBackgroundColor2: #bac37f;
 $secondaryBackgroundColor3: shade-color($secondaryBackgroundColor2, 10%);
 
@@ -47,11 +48,24 @@ $horLine3: shade-color($horLine2, 10%);
 $textColor1: #58170D;
 
 $borderWidth0: .08rem;
-$border0: $horLine1 solid $borderWidth0;
-$border1: $horLine2 solid .1rem;
+$borderWidth1: .1rem;
+
+@function border0($borderColor: $horLine1) {
+    @return $borderColor solid $borderWidth0;
+}
+
+@function border1($borderColor: $horLine1) {
+    @return $borderColor solid $borderWidth1;
+}
 
 $borderRadius: .15rem;
 $borderRadius1: .2rem;
+
+$optumLineLength: 30em;
+
+$lineHeight: 1.3em;
+$doubleSpace: 2em;
+$bookinsanityLineHeight: 1.35em;
 
 $transitionDuration: .1s;
 
@@ -71,32 +85,51 @@ $border-transition: border-color 0s, border-width $transitionDuration ease-in-ou
     transform: translate(-50%, -50%);
 }
 
+@mixin topMarginCenterItem($line-height, $item-height) {
+    margin-top: ($line-height - $item-height) * .5; // line-height minus check height
+}
+
 @function heightWithPadding($height, $padding, $padding-bottom: $padding) {
     @return calc($height + $padding + $padding-bottom);
 }
 
-@mixin button($height, $font-size, $color, $background, $border, $borderColor) {
+@function emToRem($em, $font-size) {
+    @return $font-size * $em;
+}
+
+@mixin button($height, $fontSize, $color, $background, $border, $borderColor) {
     @if $border{
-        border: $border1;
-        border-color: $borderColor;
+        border: border1($borderColor);
     }
     border-radius: $borderRadius1;
     height: $height;
     background-color: $background;
     color: $color;
-    font-size: $font-size;
+    font-size: $fontSize;
     line-height: $height;
+}
+
+@mixin active() {
+    &:active {
+        filter: brightness(95%);
+    }
 }
 
 @mixin inputBoxFocus() {
     &:focus {
+        border-color: $horLine2;
         outline: 0;
         box-shadow: 0 0 0.08em 0.12rem #cbaf6891;
+        z-index: 1;
+    }
+    &:hover {
+        border-color: $horLine2;
+        z-index: 1;
     }
 }
 
 @mixin inputBox($font-size, $line-height) {
-    @include button($line-height, $font-size, black, $backgroundColor, true, $horLine2);
+    @include button($line-height, $font-size, black, $backgroundColor, true, $horLine1);
     @include inputBoxFocus();
 }
 
@@ -107,7 +140,7 @@ $border-transition: border-color 0s, border-width $transitionDuration ease-in-ou
 body {
     font-weight: normal;
     font-style: normal;
-    line-height: 1.25em;
+    line-height: $lineHeight;
     margin: 0;
     padding: 0;
     background-color: $backgroundColor;
@@ -146,7 +179,7 @@ button, input[type="submit"] {
     --#{$prefix}tooltip-bg: #{$secondaryBackgroundColor1};
     --#{$prefix}tooltip-border-radius: .15rem;
     font-family: fonts.$Bookinsanity;
-    line-height: 1.5;
+    line-height: $bookinsanityLineHeight;
     .tooltip-inner {
         text-align: left;
     }
@@ -167,31 +200,25 @@ svg {
 
 // remove default checkbox and add custom one
 input[type="checkbox"] {
-    --#{$prefix}form-check-bg: #{$form-check-input-bg};
-
     width: $form-check-input-width;
     height: $form-check-input-width;
-    margin-top: ($line-height-base - $form-check-input-width) * .5; // line-height minus check height
     vertical-align: top;
     appearance: none;
     background-color: $backgroundColor;
-    background-image: var(--#{$prefix}form-check-bg-image);
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
-    border: $border1;
+    border: border1();
     border-radius: $borderRadius;
+    cursor: pointer;
     
     @include inputBoxFocus();
-    
-    &:active {
-        filter: $form-check-input-active-filter;
-    }
+    @include active();
 
     &:checked {
         background-color: $horLine2;
         border-color: $horLine2;
-        --#{$prefix}form-check-bg-image: #{escape-svg($form-check-input-checked-bg-image)};
+        background-image: #{escape-svg(url("data:image/svg+xml;utf8,<svg width='8' height='9' viewBox='0 0 8 9' fill='#{$backgroundColor}' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' clip-rule='evenodd' d='M7.45923 2.04036C7.71307 2.2942 7.71307 2.70575 7.45923 2.95959L3.45923 6.9596C3.20539 7.21344 2.79383 7.21344 2.53999 6.9596L0.53999 4.95959C0.286149 4.70575 0.286149 4.2942 0.53999 4.04036C0.793831 3.78652 1.20539 3.78652 1.45923 4.04036L2.99961 5.58074L6.53999 2.04036C6.79383 1.78652 7.20539 1.78652 7.45923 2.04036Z'/></svg>"))};
     }
 }
 
@@ -215,12 +242,15 @@ input[type="checkbox"] {
             cursor: pointer;
             position: relative;
 
+            // the shown item
             h1{
                 font-size: inherit;
                 font-weight: inherit;
                 width: max-content;
             }
 
+            // invisible item to size the box properly 
+            // since the shown one is absolutely positioned
             .hidden {
                 display: unset;
                 opacity: 0;
@@ -253,18 +283,26 @@ input[type="checkbox"] {
             }
         }
 
-        border-bottom: $border0;
+        border-bottom: border0();
     }
 
+    $sidePanelWidth: 23rem;
+
     #side-panel {
-        width: 25%;
+        width: $sidePanelWidth;
+        min-width: 20rem;
         height: 100%;
         background-color: $backgroundColor2;
-        border-right: $border0;
+        border-right: border0();
 
         header {
             justify-content: left;
             background-color: $backgroundColor1;
+        }
+
+        .side-panel-main {
+            overflow: scroll;
+            height: calc(100vh - (1.3rem * 1.7));
         }
 
         form {
@@ -279,17 +317,18 @@ input[type="checkbox"] {
             }
             
             $padding: 1em;
-            $line-height: 2em;
+            $doubleSpace: 2em;
             
-            button, input[type="submit"] {
+            input[type="submit"] {
                 padding: .375em .75em;
                 @include button(1.5em, inherit, white, $secondaryBackgroundColor2, false, $secondaryBackgroundColor2);
                 height: unset;
                 @include transition($btn-transition);
-            }
+                @include active();
 
-            button:hover, input[type="submit"]:hover {
-                background-color: $secondaryBackgroundColor3;
+                &:hover {
+                    background-color: $secondaryBackgroundColor3;                    
+                }
             }
 
             input[type="submit"] {
@@ -300,7 +339,7 @@ input[type="checkbox"] {
             select {
                 $background: .6em;
                 cursor: pointer;
-                @include inputBox(1rem, $line-height);
+                @include inputBox(1rem, $doubleSpace);
                 -webkit-appearance: none;
                 -moz-appearance: none;
                 appearance: none;
@@ -314,12 +353,14 @@ input[type="checkbox"] {
                 text-align: right;
             }
 
+            $labelLineHeight: 1.7em;
+
             label {
                 display: inline-flex;
                 align-items: center;
                 gap: 0.3em;
                 padding-right: .3em;
-                line-height: 1.7em;
+                line-height: $labelLineHeight;
 
                 // info/tip div
                 div {
@@ -339,35 +380,37 @@ input[type="checkbox"] {
                 cursor: pointer;
             }
 
+            input[type="checkbox"] {
+                @include topMarginCenterItem($labelLineHeight, $form-check-input-width); // line-height minus check height
+            }
+
             #date-input-div {
                 box-sizing: content-box;
                 width: -webkit-fill-available;
-                @include inputBox(1rem, $line-height);
                 display: inline-flex;
                 align-items: center;
 
                 #date-input {
+                    @include inputBox(1rem, $doubleSpace);
+
                     width: 100%;
                     text-align: center;
-                    padding: 0;
-                    border: none;
-                    border-left: $border1;
-                    border-right: $border1;
-                    line-height: inherit;
-                    font-size: inherit;
+                    margin-left: -$borderWidth0;
                     font-family: inherit;
-                    background-color: inherit;
-                    @include inputBoxFocus();
+                    border-radius: 0;
                 }
 
                 .svg-div {
-                    height: 2em;
-                    width: 2em;
-                    padding: 0;
+                    @include inputBox(1rem, $doubleSpace);
+                    border-top-right-radius: 0;
+                    border-bottom-right-radius: 0;
+                    // height: 2em;
+                    width: $doubleSpace;
+                    // padding: 0;
                     position: relative;
                     cursor: pointer;
-                    background-color: transparent;
-                    border-radius: 0;
+                    // background-color: transparent;
+                    // border-radius: 0;
                 }
 
                 svg {
@@ -376,17 +419,18 @@ input[type="checkbox"] {
                 }
 
                 #today {
-                    background-color: $horLine2;
-                    color: white;
-                    border-radius: 0;
-                    padding-top: 0;
-                    padding-bottom: 0;
-                    line-height: 2em;
-                }
-
-                #today:hover {
-                    background-color: $horLine3;
-                    border-radius: 0 .11em .11em 0;
+                    @include button(2em, 1rem, white, $horLine2, false, $horLine2);
+                    border-top-left-radius: 0;
+                    border-bottom-left-radius: 0;
+                    padding: 0 .75em;
+                    @include transition($btn-transition);
+                    @include active();
+                    
+                    &:hover {
+                        background-color: $horLine3;
+                        border-color: $horLine3;
+                        // border-radius: 0 .11em .11em 0;
+                    }
                 }
             }
 
@@ -401,15 +445,13 @@ input[type="checkbox"] {
     }
 
     #main {
-        // margin: 1.5em;
         overflow-y: scroll;
-        width: 75%;
+        width: calc(100vw - $sidePanelWidth);
+        min-width: 65%;
+
         header {
-            // background: none;
-            // border: none;
-            // font-size: 1.2rem;
-            // margin: .5rem;
-            // margin-top: 0;
+            position: sticky;
+            left: 0;
             justify-content: space-between;
 
             nav {
@@ -430,8 +472,7 @@ input[type="checkbox"] {
                     cursor: pointer;
                     display: flex;
                     align-items: center;
-                    height: heightWithPadding(1.3em, .3em);
-                    line-height: 1.3em;
+                    height: heightWithPadding($lineHeight, .3em);
                     padding: .3em;
                     gap: 0.4em;
                     
@@ -459,20 +500,22 @@ input[type="checkbox"] {
             }
         }
         #ingredient-bag {
-            // height: calc(100% - (1.7em + .5em));
-            // overflow-y: scroll;
-            font-size: 1.2rem;
+            // font-size: 1rem;
             table {
+                width: 100%;
+                // display: block;
+                // overflow: scroll;
                 border-collapse: separate;
-
-                font-size: 1rem;
-                // margin: auto;
-                width: -webkit-fill-available;
+                // font-size: inherit;
                 text-align: left;
                 td, th {
                     vertical-align: baseline;
-                    max-width: 30em;
+                    max-width: $optumLineLength;
                     padding: .5em;
+                }
+
+                input[type="checkbox"] {
+                    @include topMarginCenterItem($lineHeight, $form-check-input-width); // line-height minus check height
                 }
 
                 thead {
@@ -480,9 +523,10 @@ input[type="checkbox"] {
                     top: 0;
                     background-color: $backgroundColor;
                     text-wrap: nowrap;
+                    z-index: 1;
 
                     th {
-                        border-bottom: $border0;
+                        border-bottom: border0();
                     }
                 }
             }
@@ -528,12 +572,32 @@ input[type="checkbox"] {
                     text-align: center;
                     padding-right: 1.8em;
                 }
+
+                .even {
+                    background-color: $columnColor;
+                }
+
+                tr {
+                    background-color: $backgroundColor;
+                }
+
+                .checked {
+                    background-color: $secondaryBackgroundColor;
+                    background-color: $secondaryBackgroundColor1;
+                    background-color: #d2d9ae;
+                    background-color: mix(#d2d9ae, $secondaryBackgroundColor);
+                    box-shadow: 0 0 0.08rem 0.08rem rgb(186 195 127);
+                    /* box-shadow: 0 0 0em 0.08rem rgb(186 195 127); */
+                    z-index: 0;
+                    position: relative;
+                    border: border0($secondaryBackgroundColor2);
+                }
             }
 
             #filter-table {
                 background-color: $horLine1;
                 border-spacing: .08em 0;
-                border-bottom: $border0;
+                border-bottom: border0();
                 thead {
                     // background-color: $backgroundColor1;
                 }

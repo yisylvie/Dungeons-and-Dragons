@@ -38,8 +38,8 @@ Herbalism.prototype.initVis = function () {
     
     vis.rotatedFilters = [];
 
-    vis.headers = ["Collection Dates", "Qty", "Ingredient", "Rarity", "Details", "DC", "Found in&hellip;"];
-    let ingredientBagKeys = ['dates', 'quantity', 'ingredient', 'rarity', 'details', 'DC', 'terrain'];
+    vis.headers = ["checkbox", "Collection Dates", "Qty", "Ingredient", "Rarity", "Details", "DC", "Found in&hellip;"];
+    let ingredientBagKeys = ['checked', 'dates', 'quantity', 'ingredient', 'rarity', 'details', 'DC', 'terrain'];
 
     // map displayed names of categories to names within ingredientBag
     vis.categories = vis.headers.map((el, i) => { return { display: el, keys: ingredientBagKeys[i] } });
@@ -55,6 +55,9 @@ Herbalism.prototype.initVis = function () {
         .enter()
         .append("th")
         .html(function (d) {
+            if (d.display == "checkbox") {
+                return "<input type='checkbox'>";
+            }
             return "<div><strong>" + d.display + "</strong>" + "<svg version='1.1' id='Layer_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' width='31.806px' height='17.917px' viewBox='0 0 31.806 17.917' enable-background='new 0 0 31.806 17.917' xml:space='preserve'><path fill='currentColor' d='M31.292,3.084l-14.417,14.43c-0.148,0.148-0.301,0.252-0.458,0.312c-0.158,0.061-0.329,0.091-0.514,0.091 s-0.356-0.03-0.514-0.09c-0.157-0.06-0.31-0.164-0.458-0.312L0.5,3.084C0.167,2.75,0,2.329,0,1.82s0.171-0.935,0.514-1.278 C0.875,0.181,1.301,0,1.792,0C2.283,0,2.709,0.181,3.07,0.542l12.833,12.833L28.736,0.542c0.352-0.352,0.775-0.523,1.271-0.514 c0.495,0.009,0.914,0.185,1.257,0.528c0.361,0.361,0.542,0.787,0.542,1.278C31.806,2.324,31.634,2.741,31.292,3.084z'/></svg></div>";
         })
         .classed("unsorted", function (d) {
@@ -226,7 +229,10 @@ Herbalism.prototype.initVis = function () {
     vis.thead.on("click", function (event, d) {        
         // if it's already sorted in ascending order, sort in descending order 
         // otherwise sort in ascending
-        if (this.classList.contains("ascending")) {
+        // don't sort the checks
+        if (d.display == "checkbox") {
+            return;
+        } else if (this.classList.contains("ascending")) {
             vis.ingredientBag = vis.ingredientBag.sort((b, a) => {
                 return vis.sortIngredients(a, b, false, d);
             });
@@ -248,6 +254,20 @@ Herbalism.prototype.initVis = function () {
             this.classList.add("ascending");
         }
         vis.filterData();        
+    });
+
+    // check or uncheck all checks when header check is checked
+    vis.thead.select("input").on("change", function (event, d) {
+        if (this.checked) {
+            vis.ingredientBag.forEach(ingredient => {
+                ingredient.checked = true;
+            });
+        } else {
+            vis.ingredientBag.forEach(ingredient => {
+                ingredient.checked = false;
+            });
+        }
+        vis.filterData();
     });
 
     /* this seems wrong
@@ -459,6 +479,7 @@ Herbalism.prototype.wrangleData = function () {
                                 quantity: currentIngredient.quantity
                             }
                         ];
+                        currentIngredient.checked = false;
                         currentIngredient.DC = ingredientDC;
 
                         // add new filter options to vis.filters if they aren't already there
@@ -592,7 +613,6 @@ Herbalism.prototype.wrangleData = function () {
             } else if (filter == "concoction") {
                 vis.filters[filter].sort((a, b) => vis.customSort(vis.concoctionSort, a.display, b.display));
             } else {
-                console.log(vis.filters[filter]);
                 vis.filters[filter].sort((a, b) => {
                     if (a.display == "All") {
                         return -1;
@@ -793,6 +813,8 @@ Herbalism.prototype.updateVis = function () {
     // }
 
     // populating the table with our data
+
+    // maka da rows
     let tr = vis.tbody.selectAll('tr')
         .data(vis.ingredientBagDisplay)
         .join(
@@ -800,7 +822,7 @@ Herbalism.prototype.updateVis = function () {
             function (enter) {
                 return enter
                     .append("tr")
-                    .style("background-color", (d, i) => i % 2 == 0 ? columnColor : backgroundColor);
+                    .classed("even", (d, i) => i % 2 == 0);
             },
             function (update) {
                 return update;
@@ -809,17 +831,20 @@ Herbalism.prototype.updateVis = function () {
                 return exit
                     .remove();
             }
-        );
+        )
+        .classed("checked", function (d) {
+            console.log(d);
+            return d.checked;
+        });
 
+    // maka da data inside a da rows
     let td = tr
         .selectAll("td")
-        .remove()
-        .exit()
         .data(function (d, i) {
-            let displayedData = vis.headers.map(function (item) {
-                display = d[item];
+            let displayedData = vis.categories.map(function (category) {
+                display = d[category.keys];
                 for (const el in d) {
-                    if (el == "dates" && item == "Collection Dates") {
+                    if (el == "dates" && category.display == "Collection Dates") {
 
                         // format dates as dd/mm
                         let sortedDates = d[el].map((e) => e.date)
@@ -853,7 +878,7 @@ Herbalism.prototype.updateVis = function () {
 
                         // display terrains in comma separated lists of three
                         // if > 3 terrains truncate with ...
-                    } else if (el == "terrain" && item == "Found in&hellip;") {
+                    } else if (el == "terrain" && category.display == "Found in&hellip;") {
                         let terrainString = "";
                         if (d[el].length > 3) {
                             for (let j = 0; j < 3; j++) {
@@ -873,7 +898,7 @@ Herbalism.prototype.updateVis = function () {
                             }
                         }
                         display = terrainString;
-                    } else if (item == "Details" && el == "details") {
+                    } else if (category.display == "Details" && el == "details") {
                         let details = "<strong>" + d["type"] + ":</strong>";
 
                         // if no knowlege display an em dash
@@ -889,30 +914,59 @@ Herbalism.prototype.updateVis = function () {
                         } else if (d["knowledge"] == "basic") {
                             display = details.replace(":", "");
                         }
-                    } else if (item == "DC" && el == "DC") {
+                    } else if (category.display == "DC" && el == "DC") {
                         if (d[el] > 0) {
                             display = "+" + d[el];
                         } else {
                             display = d[el];
                         }
-                    } else if (el == "quantity" && item == "Qty") {
-                        display = d[el];
-                    } else if (el == item.toLowerCase()) {
+                    } else if (el == category.keys) {
                         display = d[el];
                     }
                 }
-                return { display: display, header: item };
+                return { display: display, header: category.display };
             });
             return displayedData;
-        });
-
-    td.enter()
-        .append("td")
+        })
+        .join(
+            function (enter) {
+                return enter
+                    .append("td");
+            },
+            function (update) {
+                return update;
+            },
+            function (exit) {
+                return exit.remove();
+            }
+        )
         .html(function (d) {
+            if (d.header == "checkbox") {
+                return "";
+            }
             return d.display;
         })
         .classed("number-td", function (d) {
-            return d.header == "Qty" || d.header == "DC" ? true : false;
+            return d.header == "Qty" || d.header == "DC";
+        });
+    
+    // add checkboxes
+    td
+        .filter(function (d) {
+            return d.header == "checkbox";
         })
-       
+        .append("input")
+        .attr("type", "checkbox")
+        .property("checked", function (d) {
+            return d.display;
+        })
+        .on("change", function (event, d) {
+            // make sure our data remains up to date with checked state
+            d.display = this.checked;
+            // parent of the parent is the tr surrounding the td with this checkbox
+            let thisTr = this.parentNode.parentNode;
+            this.checked ? thisTr.classList.add("checked") : thisTr.classList.remove("checked");
+            d3.select(thisTr).data()[0].checked = this.checked;
+            console.log(vis.ingredientBag);
+        });
 }

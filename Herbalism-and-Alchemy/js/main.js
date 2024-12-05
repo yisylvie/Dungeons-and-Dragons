@@ -33,7 +33,7 @@ const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstra
     boundary: forageForm,
     // container: forageForm,
     fallbackPlacements: ["right", "left", "top", "bottom"],
-    // trigger: "click"
+    trigger: "click"
 }));
 
 const datePicker = flatpickr("#date-input-div", {

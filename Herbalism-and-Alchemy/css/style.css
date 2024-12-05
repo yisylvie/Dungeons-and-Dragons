@@ -899,7 +899,7 @@ progress {
 body {
   font-weight: normal;
   font-style: normal;
-  line-height: 1.25em;
+  line-height: 1.3em;
   margin: 0;
   padding: 0;
   background-color: #fcf9f2;
@@ -933,10 +933,10 @@ button, input[type=submit] {
   --bs-tooltip-padding-x: 0.5rem;
   --bs-tooltip-padding-y: 0.25rem;
   --bs-tooltip-color: black;
-  --bs-tooltip-bg: #d1d99c;
+  --bs-tooltip-bg: #d2d9ae;
   --bs-tooltip-border-radius: .15rem;
   font-family: "Bookinsanity", arial, helvetica, sans-serif;
-  line-height: 1.5;
+  line-height: 1.35em;
 }
 .tooltip .tooltip-inner {
   text-align: left;
@@ -956,31 +956,35 @@ svg {
 }
 
 input[type=checkbox] {
-  --bs-form-check-bg: var(--bs-body-bg);
   width: 1em;
   height: 1em;
-  margin-top: 0.25em;
   vertical-align: top;
   appearance: none;
   background-color: #fcf9f2;
-  background-image: var(--bs-form-check-bg-image);
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
-  border: #CBAF68 solid 0.1rem;
+  border: #dfcea1 solid 0.1rem;
   border-radius: 0.15rem;
+  cursor: pointer;
 }
 input[type=checkbox]:focus {
+  border-color: #CBAF68;
   outline: 0;
   box-shadow: 0 0 0.08em 0.12rem rgba(203, 175, 104, 0.568627451);
+  z-index: 1;
+}
+input[type=checkbox]:hover {
+  border-color: #CBAF68;
+  z-index: 1;
 }
 input[type=checkbox]:active {
-  filter: brightness(90%);
+  filter: brightness(95%);
 }
 input[type=checkbox]:checked {
   background-color: #CBAF68;
   border-color: #CBAF68;
-  --bs-form-check-bg-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3e%3c/svg%3e");
+  background-image: url("data:image/svg+xml;utf8,%3csvg width='8' height='9' viewBox='0 0 8 9' fill='%23fcf9f2' xmlns='http://www.w3.org/2000/svg'%3e%3cpath fill-rule='evenodd' clip-rule='evenodd' d='M7.45923 2.04036C7.71307 2.2942 7.71307 2.70575 7.45923 2.95959L3.45923 6.9596C3.20539 7.21344 2.79383 7.21344 2.53999 6.9596L0.53999 4.95959C0.286149 4.70575 0.286149 4.2942 0.53999 4.04036C0.793831 3.78652 1.20539 3.78652 1.45923 4.04036L2.99961 5.58074L6.53999 2.04036C6.79383 1.78652 7.20539 1.78652 7.45923 2.04036Z'/%3e%3c/svg%3e");
 }
 
 #everything {
@@ -1042,7 +1046,8 @@ input[type=checkbox]:checked {
   border-bottom: #CBAF68 solid 0.2rem;
 }
 #everything #side-panel {
-  width: 25%;
+  width: 23rem;
+  min-width: 20rem;
   height: 100%;
   background-color: #f4ecd8;
   border-right: #dfcea1 solid 0.08rem;
@@ -1051,13 +1056,17 @@ input[type=checkbox]:checked {
   justify-content: left;
   background-color: #FAF6EC;
 }
+#everything #side-panel .side-panel-main {
+  overflow: scroll;
+  height: calc(100vh - 2.21rem);
+}
 #everything #side-panel form {
   padding: 1.2em;
 }
 #everything #side-panel form > div {
   margin-bottom: 0.4em;
 }
-#everything #side-panel form button, #everything #side-panel form input[type=submit] {
+#everything #side-panel form input[type=submit] {
   padding: 0.375em 0.75em;
   border-radius: 0.2rem;
   height: 1.5em;
@@ -1069,11 +1078,14 @@ input[type=checkbox]:checked {
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 @media (prefers-reduced-motion: reduce) {
-  #everything #side-panel form button, #everything #side-panel form input[type=submit] {
+  #everything #side-panel form input[type=submit] {
     transition: none;
   }
 }
-#everything #side-panel form button:hover, #everything #side-panel form input[type=submit]:hover {
+#everything #side-panel form input[type=submit]:active {
+  filter: brightness(95%);
+}
+#everything #side-panel form input[type=submit]:hover {
   background-color: #a7b072;
 }
 #everything #side-panel form input[type=submit] {
@@ -1081,8 +1093,7 @@ input[type=checkbox]:checked {
 }
 #everything #side-panel form select {
   cursor: pointer;
-  border: #CBAF68 solid 0.1rem;
-  border-color: #CBAF68;
+  border: #dfcea1 solid 0.1rem;
   border-radius: 0.2rem;
   height: 2em;
   background-color: #fcf9f2;
@@ -1102,8 +1113,14 @@ input[type=checkbox]:checked {
   text-align: right;
 }
 #everything #side-panel form select:focus {
+  border-color: #CBAF68;
   outline: 0;
   box-shadow: 0 0 0.08em 0.12rem rgba(203, 175, 104, 0.568627451);
+  z-index: 1;
+}
+#everything #side-panel form select:hover {
+  border-color: #CBAF68;
+  z-index: 1;
 }
 #everything #side-panel form label {
   display: inline-flex;
@@ -1124,64 +1141,90 @@ input[type=checkbox]:checked {
 #everything #side-panel form input[type=checkbox] + label {
   cursor: pointer;
 }
+#everything #side-panel form input[type=checkbox] {
+  margin-top: 0.35em;
+}
 #everything #side-panel form #date-input-div {
   box-sizing: content-box;
   width: -webkit-fill-available;
-  border: #CBAF68 solid 0.1rem;
-  border-color: #CBAF68;
+  display: inline-flex;
+  align-items: center;
+}
+#everything #side-panel form #date-input-div #date-input {
+  border: #dfcea1 solid 0.1rem;
   border-radius: 0.2rem;
   height: 2em;
   background-color: #fcf9f2;
   color: black;
   font-size: 1rem;
   line-height: 2em;
-  display: inline-flex;
-  align-items: center;
-}
-#everything #side-panel form #date-input-div:focus {
-  outline: 0;
-  box-shadow: 0 0 0.08em 0.12rem rgba(203, 175, 104, 0.568627451);
-}
-#everything #side-panel form #date-input-div #date-input {
   width: 100%;
   text-align: center;
-  padding: 0;
-  border: none;
-  border-left: #CBAF68 solid 0.1rem;
-  border-right: #CBAF68 solid 0.1rem;
-  line-height: inherit;
-  font-size: inherit;
+  margin-left: -0.08rem;
   font-family: inherit;
-  background-color: inherit;
+  border-radius: 0;
 }
 #everything #side-panel form #date-input-div #date-input:focus {
+  border-color: #CBAF68;
   outline: 0;
   box-shadow: 0 0 0.08em 0.12rem rgba(203, 175, 104, 0.568627451);
+  z-index: 1;
+}
+#everything #side-panel form #date-input-div #date-input:hover {
+  border-color: #CBAF68;
+  z-index: 1;
 }
 #everything #side-panel form #date-input-div .svg-div {
+  border: #dfcea1 solid 0.1rem;
+  border-radius: 0.2rem;
   height: 2em;
+  background-color: #fcf9f2;
+  color: black;
+  font-size: 1rem;
+  line-height: 2em;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
   width: 2em;
-  padding: 0;
   position: relative;
   cursor: pointer;
-  background-color: transparent;
-  border-radius: 0;
+}
+#everything #side-panel form #date-input-div .svg-div:focus {
+  border-color: #CBAF68;
+  outline: 0;
+  box-shadow: 0 0 0.08em 0.12rem rgba(203, 175, 104, 0.568627451);
+  z-index: 1;
+}
+#everything #side-panel form #date-input-div .svg-div:hover {
+  border-color: #CBAF68;
+  z-index: 1;
 }
 #everything #side-panel form #date-input-div svg {
   vertical-align: top;
   fill: #CBAF68;
 }
 #everything #side-panel form #date-input-div #today {
+  border-radius: 0.2rem;
+  height: 2em;
   background-color: #CBAF68;
   color: white;
-  border-radius: 0;
-  padding-top: 0;
-  padding-bottom: 0;
+  font-size: 1rem;
   line-height: 2em;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  padding: 0 0.75em;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  #everything #side-panel form #date-input-div #today {
+    transition: none;
+  }
+}
+#everything #side-panel form #date-input-div #today:active {
+  filter: brightness(95%);
 }
 #everything #side-panel form #date-input-div #today:hover {
   background-color: #b79e5e;
-  border-radius: 0 0.11em 0.11em 0;
+  border-color: #b79e5e;
 }
 #everything #side-panel form #terrain {
   text-align: left;
@@ -1191,9 +1234,12 @@ input[type=checkbox]:checked {
 }
 #everything #main {
   overflow-y: scroll;
-  width: 75%;
+  width: calc(100vw - 23rem);
+  min-width: 65%;
 }
 #everything #main header {
+  position: sticky;
+  left: 0;
   justify-content: space-between;
 }
 #everything #main header nav {
@@ -1214,7 +1260,6 @@ input[type=checkbox]:checked {
   display: flex;
   align-items: center;
   height: 1.9em;
-  line-height: 1.3em;
   padding: 0.3em;
   gap: 0.4em;
 }
@@ -1236,13 +1281,9 @@ input[type=checkbox]:checked {
   padding: 0;
   border: none;
 }
-#everything #main #ingredient-bag {
-  font-size: 1.2rem;
-}
 #everything #main #ingredient-bag table {
+  width: 100%;
   border-collapse: separate;
-  font-size: 1rem;
-  width: -webkit-fill-available;
   text-align: left;
 }
 #everything #main #ingredient-bag table td, #everything #main #ingredient-bag table th {
@@ -1250,11 +1291,15 @@ input[type=checkbox]:checked {
   max-width: 30em;
   padding: 0.5em;
 }
+#everything #main #ingredient-bag table input[type=checkbox] {
+  margin-top: 0.15em;
+}
 #everything #main #ingredient-bag table thead {
   position: sticky;
   top: 0;
   background-color: #fcf9f2;
   text-wrap: nowrap;
+  z-index: 1;
 }
 #everything #main #ingredient-bag table thead th {
   border-bottom: #dfcea1 solid 0.08rem;
@@ -1286,6 +1331,23 @@ input[type=checkbox]:checked {
 #everything #main #ingredient-bag #ingredient-bag-table .number-td {
   text-align: center;
   padding-right: 1.8em;
+}
+#everything #main #ingredient-bag #ingredient-bag-table .even {
+  background-color: #f0e4cb;
+}
+#everything #main #ingredient-bag #ingredient-bag-table tr {
+  background-color: #fcf9f2;
+}
+#everything #main #ingredient-bag #ingredient-bag-table .checked {
+  background-color: #E0E5C0;
+  background-color: #d2d9ae;
+  background-color: #d2d9ae;
+  background-color: #d9dfb7;
+  box-shadow: 0 0 0.08rem 0.08rem rgb(186, 195, 127);
+  /* box-shadow: 0 0 0em 0.08rem rgb(186 195 127); */
+  z-index: 0;
+  position: relative;
+  border: #bac37f solid 0.08rem;
 }
 #everything #main #ingredient-bag #filter-table {
   background-color: #dfcea1;
