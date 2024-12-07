@@ -121,8 +121,24 @@ Herbalism.prototype.initVis = function () {
 
     // download a csv file on click of downloadIcon
     setClickListener(downloadIcon, function (e) {
-        let csv = encodeURI("data:text/csv;charset=utf-8," + d3.csvFormat(vis.ingredientBag));
-        window.open(csv);
+        let downloadableBag = vis.ingredientBag.map((el) => {
+            let dates = [];
+            el.dates.forEach(date => {
+                dates.push(date.date);
+            });
+            let returnedEl = structuredClone(el);
+            returnedEl.dates = dates;
+            return returnedEl;
+        });
+        console.log(vis.ingredientBag);
+        let blob = new Blob([d3.csvFormat(downloadableBag)], {type: "data:text/csv;charset=utf-8"});
+        let url = URL.createObjectURL(blob);
+        let pom = document.createElement("a");
+        pom.href = url;
+        pom.setAttribute("download", "Ingredient_Bag.csv");
+        pom.click();
+        // let csv = encodeURI("data:text/csv;charset=utf-8," + d3.csvFormat(vis.ingredientBag));
+        // window.open(csv);
     })
 
     // show/hide filters on click of filterIcon
@@ -258,16 +274,15 @@ Herbalism.prototype.initVis = function () {
 
     // check or uncheck all checks when header check is checked
     vis.theadTr.select("input").on("change", function (event, d) {
+        console.log("checkin");
         if (this.checked) {
-            console.log(this);
-            console.log(this.parentNode.parentNode);
             this.parentNode.parentNode.classList.add("checked");
-            vis.ingredientBag.forEach(ingredient => {
+            vis.ingredientBagDisplay.forEach(ingredient => {
                 ingredient.checked = true;
             });
         } else {
             this.parentNode.parentNode.classList.remove("checked");
-            vis.ingredientBag.forEach(ingredient => {
+            vis.ingredientBagDisplay.forEach(ingredient => {
                 ingredient.checked = false;
             });
         }
@@ -639,6 +654,9 @@ Herbalism.prototype.wrangleData = function () {
  * Filter our ingredientBag into ingredientBagDisplay based on the filters from vis.filters
  */
 Herbalism.prototype.filterData = function () {
+    // the header "select all" checkbox should only be 
+    // checked if every shown ingredient is checked
+    let headerChecked = true;
     vis.ingredientBagDisplay = vis.ingredientBag.filter(function (d) {
         let isDisplayed = true;
         for (const filter in vis.filters) {
@@ -657,8 +675,26 @@ Herbalism.prototype.filterData = function () {
                 isDisplayed = isDisplayed && selectedFilters.some((el) => d[filter].includes(el.display));
             }
         }
+
+        // unselect any items that aren't being displayed
+        // only determine if header is checked if the ingredient is actually displayed
+        if (!isDisplayed) {
+            d.checked = false;
+        } else {
+            console.log(d);
+
+            headerChecked = headerChecked && d.checked;
+        }
         return isDisplayed;
     });
+    if(headerChecked) {
+        vis.theadTr.select("input").property("checked", true);
+        vis.theadTr.classed("checked", true);
+    } else {
+        vis.theadTr.select("input").property("checked", false);
+        vis.theadTr.classed("checked", false);
+    }
+    console.log(vis.ingredientBagDisplay);
     vis.updateVis();
 }
 
@@ -672,7 +708,6 @@ Herbalism.prototype.updateFilterVis = function () {
     let tr = vis.filterTbody.selectAll('tr')
         .data(vis.rotatedFilters)
         .join(
-            // Styling table so rows alternate in colors
             function (enter) {
                 return enter
                     .append("tr")
@@ -771,7 +806,13 @@ Herbalism.prototype.updateFilterVis = function () {
                     vis.filterDisplay[d.header].find((element) => element.display == d.display).selected = true;
                     d.selected = true;
                 }
+
+                // after a filter is selected filter the table based on the selected filter
                 vis.filterData();
+
+                // then, hide filters based on which ingredients on the screen 
+                // actually correspond to a filter
+                
                 // vis.filterDisplay = structuredClone(vis.filters);
                 for (const filter in vis.filterDisplay) {
                     if (filter != d.header) {
@@ -953,6 +994,14 @@ Herbalism.prototype.updateVis = function () {
             return d.header == "Qty" || d.header == "DC";
         });
     
+    let shifted = false;
+    window.addEventListener("keydown", function (e) {
+        shifted = e.shiftKey;
+    });
+    window.addEventListener("keyup", function (e) {
+        shifted = e.shiftKey;
+    });
+    
     // add checkboxes
     td
         .filter(function (d) {
@@ -965,6 +1014,9 @@ Herbalism.prototype.updateVis = function () {
             return d.display;
         })
         .on("change", function (event, d) {
+            console.log(shifted);
+            console.log(event);
+            console.log("body checking");
             // unselect header checkbox if unselecting an item
             if (!this.checked) {
                 vis.theadTr.classed("checked", false);
